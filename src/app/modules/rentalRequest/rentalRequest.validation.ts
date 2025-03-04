@@ -9,8 +9,8 @@ const RentalRequestValidationSchema = z.object({
              }),
         status: z.enum(
             [RentalRequestStatus.ACCEPTED,RentalRequestStatus.PENDING,RentalRequestStatus.   REJECTED]
-            ),
-        paymentStatus: z.enum(["pending","paid","failed"]),
+            ).optional(),
+        paymentStatus: z.enum(["pending","paid","failed"]).optional(),
         tenantUser: z.string().refine((val) => isValidObjectId(val), {
                             message: "Invalid ObjectId",
                         }),

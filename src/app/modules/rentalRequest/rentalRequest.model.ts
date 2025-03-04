@@ -14,12 +14,14 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
        status: {
           type: String,
           required: true,
-          enum:[RentalRequestStatus.PENDING,RentalRequestStatus.ACCEPTED,RentalRequestStatus.REJECTED]
+          enum:[RentalRequestStatus.PENDING,RentalRequestStatus.ACCEPTED,RentalRequestStatus.REJECTED],
+          default:RentalRequestStatus.PENDING
        },
        paymentStatus: {
           type: String,
           required: true,
-          enum:["pending","paid","failed"]
+          enum:["pending","paid","failed"],
+          default:"pending"
        },
        tenantUser: {
           type: Schema.Types.ObjectId,
