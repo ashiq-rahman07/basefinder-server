@@ -53,11 +53,11 @@ const loginUser = async (payload: IAuth) => {
          config.jwt_refresh_expires_in as string
       );
 
-      const updateUserInfo = await User.findByIdAndUpdate(
-         user._id,
-         // { clientInfo: payload.clientInfo, lastLogin: Date.now() },
-         { new: true, session }
-      );
+      // const updateUserInfo = await User.findByIdAndUpdate(
+      //    user._id,
+      //    // { clientInfo: payload.clientInfo, lastLogin: Date.now() },
+      //    { new: true, session }
+      // );
 
       await session.commitTransaction();
 
