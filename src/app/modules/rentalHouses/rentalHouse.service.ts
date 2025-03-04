@@ -10,14 +10,14 @@ const createRentalHouse = async(payload:IRentalHouse)=>{
 }
 
 const getAllRentalHouse  = async(query:Record<string,unknown>)=>{
-    const RentalHouseQuery = new QueryBuilder(RentalHouse.find(), query)
+    const RentalHouseQuery = new QueryBuilder(RentalHouse.find().populate('landlordUser').setOptions({ strictPopulate: false }), query)
     .search(RentalHouseSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
 
- const result = await RentalHouseQuery.modelQuery;
+ const result = await RentalHouseQuery.modelQuery.populate('User');
  const meta = await RentalHouseQuery.countTotal();
  return {
     result,

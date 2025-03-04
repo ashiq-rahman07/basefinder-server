@@ -1,6 +1,8 @@
 import mongoose, { Schema } from "mongoose";
 import { IRentalHouse } from "./rentalHouse.interface";
 
+
+mongoose.set('strictPopulate', false);
 const rentalHoseSchema = new Schema<IRentalHouse>(
     {
         location: {
@@ -27,15 +29,17 @@ const rentalHoseSchema = new Schema<IRentalHouse>(
        },
     
     
-       landlordId: {
-          type:mongoose.Schema.Types.ObjectId,
+       landlordUser: {
+          type:Schema.Types.ObjectId,
           ref:'User'
        },
      
     },
     {
+     
        timestamps: true,
-    }
+    },
+   
  );
 const RentalHouse = mongoose.model('RentalHouse',rentalHoseSchema);
 export default RentalHouse;

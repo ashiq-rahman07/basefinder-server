@@ -6,5 +6,5 @@ export interface IRentalHouse{
     rentAmount:number; 
     bedrooms:number,
     images:Array<string>;
-    landlordId:ObjectId
+    landlordUser:ObjectId
 }
