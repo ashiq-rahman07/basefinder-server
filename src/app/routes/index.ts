@@ -13,6 +13,10 @@ const moduleRoutes = [
       path: '/auth',
       route: AuthRoutes,
    },
+   {
+      path: '/rental-house',
+      route: AuthRoutes,
+   },
 
 ];
 
