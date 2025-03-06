@@ -14,7 +14,7 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
        status: {
           type: String,
           required: true,
-          enum:[RentalRequestStatus.PENDING,RentalRequestStatus.ACCEPTED,RentalRequestStatus.REJECTED],
+          enum:[RentalRequestStatus.PENDING,RentalRequestStatus.APPROVED,RentalRequestStatus.REJECTED],
           default:RentalRequestStatus.PENDING
        },
        paymentStatus: {
@@ -31,7 +31,8 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
        message:{
          type:String,
          required:true
-       }
+       },
+       landlordPhoneNumber: { type: String },
      
     },
     {

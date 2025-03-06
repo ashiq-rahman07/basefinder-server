@@ -33,6 +33,7 @@ const rentalHoseSchema = new Schema<IRentalHouse>(
           type:Schema.Types.ObjectId,
           ref:'User'
        },
+       isAvailable: { type: Boolean, default: true },
      
     },
     {

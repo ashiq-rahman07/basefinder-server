@@ -3,7 +3,7 @@ import { ObjectId } from "mongoose";
 
 export enum RentalRequestStatus{
     PENDING = 'pending',
-    ACCEPTED = 'accepted',
+    APPROVED = 'approved',
     REJECTED = 'rejected'
 }
 export interface IRentalRequest{
@@ -11,5 +11,6 @@ export interface IRentalRequest{
     status:RentalRequestStatus;
     paymentStatus:"pending"|"paid"|"failed"; 
     tenantUser:ObjectId,
-    message:string
+    message:string,
+    landlordPhoneNumber?:string
 }

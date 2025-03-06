@@ -1,4 +1,5 @@
 import QueryBuilder from "../../builder/QueryBuilder";
+import AppError from "../../errors/appError";
 import { RentalRequestSearchableFields } from "./rentalRequest.constant";
 import { IRentalRequest } from "./rentalRequest.interface";
 import RentalRequest from "./rentalRequest.model";
@@ -7,6 +8,18 @@ const createRentalRequest = async(payload:IRentalRequest)=>{
     const rentalHouse = await RentalRequest.create(payload);
     return rentalHouse;
 }
+
+ const approveRequest = async(id:string,payload:string)=>{
+    const request = await RentalRequest.findById(id);
+    if (!request) {
+      return new AppError(404,'Rental Request Not Found')
+    }
+
+    // Update the request status and add landlord's phone number
+    // request.status ="approved";
+    // request.landlordPhoneNumber = landlordPhoneNumber;
+    await request.save();
+ }
 
 const getAllRentalRequest  = async(query:Record<string,unknown>)=>{
     const RentalRequestQuery = new QueryBuilder(RentalRequest.find(), query)
@@ -43,5 +56,6 @@ export const RentalRequestServices = {
     getAllRentalRequest,
     getRenTalRequestById,
     updateRenTalRequestById,
-    deleteRenTalRequestById
+    deleteRenTalRequestById,
+    approveRequest
 }

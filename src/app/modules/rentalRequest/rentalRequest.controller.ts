@@ -13,6 +13,19 @@ const createRentalRequest = catchAsync(async (req, res) => {
     });
   });
   
+const  approveRequest = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { landlordPhoneNumber } = req.body;
+    const result = await RentalRequestServices.approveRequest(id,landlordPhoneNumber);
+  
+    sendResponse(res, {
+      success: true,
+      message: 'Rental Request Approved successfully',
+      statusCode: 201,
+      data: result,
+    });
+  });
+  
 const getAllRentalRequest  = catchAsync(async (req, res) => {
     const result = await RentalRequestServices.getAllRentalRequest(req.query);
   
@@ -64,5 +77,6 @@ const deleteRenTalRequestById  = catchAsync(async (req, res) => {
     getAllRentalRequest,
     getRenTalRequestById,
     updateRenTalRequestById,
-    deleteRenTalRequestById
+    deleteRenTalRequestById,
+    approveRequest
 }

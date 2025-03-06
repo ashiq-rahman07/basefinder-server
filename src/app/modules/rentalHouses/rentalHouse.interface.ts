@@ -6,5 +6,6 @@ export interface IRentalHouse{
     rentAmount:number; 
     bedrooms:number,
     images:Array<string>;
-    landlordUser:ObjectId
+    landlordUser:ObjectId;
+    isAvailable:boolean
 }
