@@ -12,6 +12,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinaryUpload,
     params: {
         public_id: (_req, file) =>
+            
             Math.random().toString(36).substring(2) +
             '-' +
             Date.now() +
@@ -21,4 +22,7 @@ const storage = new CloudinaryStorage({
             removeExtension(file.originalname),
     },
 });
+
+
 export const multerUpload = multer({ storage: storage });
+

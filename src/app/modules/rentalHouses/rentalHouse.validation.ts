@@ -7,7 +7,7 @@ const RentalHouseValidationSchema = z.object({
         description: z.string(),
         rentAmount: z.number(),
         bedrooms: z.number(),
-        images: z.array(z.string()),
+        images: z.array(z.string()).optional(),
         landlordUser: z.string().refine((val) => isValidObjectId(val), {
         message: "Invalid ObjectId",
     }) // Assuming landlordId is a string representing an ObjectId

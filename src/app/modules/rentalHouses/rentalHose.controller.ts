@@ -2,9 +2,11 @@ import { string } from "zod";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { RentalHouseServices } from "./rentalHouse.service";
+import { IImageFiles } from "../../interface/IImageFile";
 
 const createRentalHouse = catchAsync(async (req, res) => {
-    const result = await RentalHouseServices.createRentalHouse(req.body);
+  const files = req.files
+    const result = await RentalHouseServices.createRentalHouse(req.body, files as IImageFiles,);
   
     sendResponse(res, {
       success: true,

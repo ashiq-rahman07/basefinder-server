@@ -3,9 +3,21 @@ import RentalHouse from "./rentalHose.model";
 import { IRentalHouse } from "./rentalHouse.interface";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { RentalHouseSearchableFields } from "./rentalHouse.constant";
+import { IImageFiles } from "../../interface/IImageFile";
+import AppError from "../../errors/appError";
+import { StatusCodes } from "http-status-codes";
 
-const createRentalHouse = async(payload:IRentalHouse)=>{
-    const rentalHouse = await RentalHouse.create(payload);
+const createRentalHouse = async(houseData:Partial<IRentalHouse>,houseImages: IImageFiles,)=>{
+    const { images } = houseImages;
+    if (!images || images.length === 0) {
+       throw new AppError(
+          StatusCodes.BAD_REQUEST,
+          'Product images are required.'
+       );
+    }
+ 
+    houseData.images = images.map((image) => image.path);
+    const rentalHouse = await RentalHouse.create(houseData);
     return rentalHouse;
 }
 

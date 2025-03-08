@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.post(
   '/create-rental-request',
+  
   validateRequest(RentalRequestValidation.RentalRequestValidationSchema),
 RentalRequestController.createRentalRequest
 );
