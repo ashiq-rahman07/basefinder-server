@@ -10,7 +10,7 @@ import { categoryValidation } from './category.validation';
 const router = Router();
 
 router.get("/", CategoryController.getAllCategory)
-
+router.get('/created-user',auth(UserRole.ADMIN,UserRole.Landlord),CategoryController.getAllCategoryUser);
 router.post(
     '/',
     auth(UserRole.ADMIN, UserRole.Landlord),
@@ -34,5 +34,5 @@ router.delete(
     auth(UserRole.ADMIN, UserRole.Landlord),
     CategoryController.deleteCategory
 )
-
+// router.get('/created-user',auth(UserRole.ADMIN,UserRole.Landlord),CategoryController.getAllCategoryUser);
 export const CategoryRoutes = router;

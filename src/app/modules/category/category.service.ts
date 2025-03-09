@@ -8,6 +8,7 @@ import { Category } from "./category.model";
 import User from "../user/user.model";
 import { UserRole } from "../user/user.interface";
 import RentalHouse from "../rentalHouses/rentalHose.model";
+import { Request } from "express";
 
 
 const createCategory = async (
@@ -62,7 +63,45 @@ const getAllCategory = async (query: Record<string, unknown>) => {
     result: hierarchy,
   };
 };
+const getAllCategoryByUser  = async(req:Request)=>{
+  const {query,user}=req
 
+      let categories;
+  
+      // If the user is an admin, fetch all listings
+      if (user.role === "admin") {
+        categories = new QueryBuilder(Category.find().populate('createdBy',"_id name").setOptions({ strictPopulate: false }), query)
+        .search(['name'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+      }else if (user.role === "landlord") {
+        categories = new QueryBuilder(Category.find({ createdBy: user.userId }).populate('createdBy',"_id name").setOptions({ strictPopulate: false }), query)
+        .search(['name'])
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+      };
+      // If the user is a tenant, return an empty array or handle accordingly
+  //    console.log('lend and admin :',rentalHouses)
+
+
+  // const RentalHouseQuery = new QueryBuilder(RentalHouse.find().populate('landlordUser').populate("category","_id name").setOptions({ strictPopulate: false }), query)
+  // .search(RentalHouseSearchableFields)
+  // .filter()
+  // .sort()
+  // .paginate()
+  // .fields();
+// console.log(rentalHouses)
+const result = await categories?.modelQuery.populate('User');
+const meta = await categories?.countTotal();
+return {
+  result,
+  meta,
+};
+};
 const updateCategoryIntoDB = async (
   id: string,
   payload: Partial<ICategory>,
@@ -122,5 +161,6 @@ export const CategoryService = {
   createCategory,
   getAllCategory,
   updateCategoryIntoDB,
-  deleteCategoryIntoDB
+  deleteCategoryIntoDB,
+  getAllCategoryByUser
 }

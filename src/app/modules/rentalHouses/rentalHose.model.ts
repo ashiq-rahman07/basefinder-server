@@ -9,10 +9,13 @@ const rentalHoseSchema = new Schema<IRentalHouse>(
           type: String,
           required: true,
        },
+       category:{
+          type:Schema.Types.ObjectId,
+          ref:'Category'
+       },
        description: {
           type: String,
           required: true,
-          unique: true,
           lowercase: true,
        },
        rentAmount: {
