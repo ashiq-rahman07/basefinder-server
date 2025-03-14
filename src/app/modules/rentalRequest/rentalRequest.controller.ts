@@ -3,7 +3,9 @@ import sendResponse from "../../utils/sendResponse";
 import { RentalRequestServices } from "./rentalRequest.service";
 
 const createRentalRequest = catchAsync(async (req, res) => {
-    const result = await RentalRequestServices.createRentalRequest(req.body);
+  const  {userId} = req.user
+ 
+    const result = await RentalRequestServices.createRentalRequest(userId,req.body);
   
     sendResponse(res, {
       success: true,
@@ -28,6 +30,18 @@ const  approveRequest = catchAsync(async (req, res) => {
   
 const getAllRentalRequest  = catchAsync(async (req, res) => {
     const result = await RentalRequestServices.getAllRentalRequest(req.query);
+  
+    sendResponse(res, {
+      success: true,
+      message: 'Rental Request retrive successfully',
+      statusCode: 201,
+      data: result,
+    });
+  });
+  
+const getAllRentalRequestLandlord  = catchAsync(async (req, res) => {
+  const {userId}=req.user
+    const result = await RentalRequestServices.getAllRentalRequestLandlord(userId);
   
     sendResponse(res, {
       success: true,
@@ -75,6 +89,7 @@ const deleteRenTalRequestById  = catchAsync(async (req, res) => {
   export const RentalRequestController = {
     createRentalRequest,
     getAllRentalRequest,
+    getAllRentalRequestLandlord,
     getRenTalRequestById,
     updateRenTalRequestById,
     deleteRenTalRequestById,

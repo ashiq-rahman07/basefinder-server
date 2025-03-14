@@ -1,29 +1,27 @@
 import mongoose, { Schema } from "mongoose";
 // import { IRentalHouse } from "./rentalHouse.interface";
-import { IRentalRequest, RentalRequestStatus } from "./rentalRequest.interface";
+import { IRentalRequest } from "./rentalRequest.interface";
 
 
 mongoose.set('strictPopulate', false);
 const rentalRequestSchema = new Schema<IRentalRequest>(
     {
-        houseId: {
+      listingId: {
           type: Schema.Types.ObjectId,
           required: true,
           ref:'RentalHouse'
        },
        status: {
           type: String,
-          required: true,
-          enum:[RentalRequestStatus.PENDING,RentalRequestStatus.APPROVED,RentalRequestStatus.REJECTED],
-          default:RentalRequestStatus.PENDING
+          enum:['Pending','Approved','Rejected'],
+          default:'Pending'
        },
        paymentStatus: {
           type: String,
-          required: true,
-          enum:["pending","paid","failed"],
-          default:"pending"
+          enum:["Pending","Paid","Failed"],
+          default:"Pending"
        },
-       tenantUser: {
+       tenantId: {
           type: Schema.Types.ObjectId,
           required: true,
           ref:'User'
@@ -32,7 +30,7 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
          type:String,
          required:true
        },
-       landlordPhoneNumber: { type: String },
+       landlordPhone: { type: String },
      
     },
     {

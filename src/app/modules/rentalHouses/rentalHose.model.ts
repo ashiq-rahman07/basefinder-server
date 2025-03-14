@@ -5,6 +5,11 @@ import { IRentalHouse } from "./rentalHouse.interface";
 mongoose.set('strictPopulate', false);
 const rentalHoseSchema = new Schema<IRentalHouse>(
     {
+
+        name: {
+          type: String,
+          required: true,
+       },
         location: {
           type: String,
           required: true,
@@ -23,6 +28,10 @@ const rentalHoseSchema = new Schema<IRentalHouse>(
           required: true,
        },
        bedrooms: {
+          type: Number,
+          required: true,
+       },
+       bathrooms: {
           type: Number,
           required: true,
        },

@@ -1,11 +1,17 @@
 import QueryBuilder from "../../builder/QueryBuilder";
 import AppError from "../../errors/appError";
+import RentalHouse from "../rentalHouses/rentalHose.model";
 import { RentalRequestSearchableFields } from "./rentalRequest.constant";
 import { IRentalRequest } from "./rentalRequest.interface";
 import RentalRequest from "./rentalRequest.model";
 
-const createRentalRequest = async(payload:IRentalRequest)=>{
-    const rentalHouse = await RentalRequest.create(payload);
+const createRentalRequest = async(userId:string,payload:IRentalRequest)=>{
+  
+    const requestData = {
+        ...payload,
+        tenantId:userId,
+    }
+    const rentalHouse = await RentalRequest.create(requestData);
     return rentalHouse;
 }
 
@@ -36,6 +42,17 @@ const getAllRentalRequest  = async(query:Record<string,unknown>)=>{
     meta,
  };
 };
+const getAllRentalRequestLandlord  = async(userId:string)=>{
+    const listings = await RentalHouse.find({ landlordUser:userId }).select('_id');
+    const listingIds = listings.map((listing) => listing._id);
+
+    const result = await RentalRequest.find({ listingId: { $in: listingIds } }).populate(
+        'tenantId',
+        'name email phone'
+      );
+
+ return result;
+};
 
 const getRenTalRequestById = async(id:string)=>{
     const rentalRequest = await RentalRequest.findById(id);
@@ -57,5 +74,6 @@ export const RentalRequestServices = {
     getRenTalRequestById,
     updateRenTalRequestById,
     deleteRenTalRequestById,
-    approveRequest
+    approveRequest,
+    getAllRentalRequestLandlord
 }

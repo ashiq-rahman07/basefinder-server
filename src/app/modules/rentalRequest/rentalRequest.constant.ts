@@ -1,4 +1,4 @@
 export const RentalRequestSearchableFields = [
-    'houseId',
-   'status'
+    'listingId',
+   'tenantId'
 ];
