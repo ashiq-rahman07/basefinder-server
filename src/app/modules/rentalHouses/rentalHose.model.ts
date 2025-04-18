@@ -35,6 +35,9 @@ const rentalHoseSchema = new Schema<IRentalHouse>(
           type: Number,
           required: true,
        },
+       amenities:{
+         type:[String]
+       },
        images: {
           type: [String],
          required:true

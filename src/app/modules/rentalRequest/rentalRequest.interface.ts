@@ -7,6 +7,8 @@ export interface IRentalRequest {
     tenantId: ObjectId; // ID of the tenant submitting the request
     status: 'Pending' | 'Approved' | 'Rejected'; // Request status
     landlordPhone?: string; // Landlord's phone number (if approved)
+    moveDate: Date;
+    rentDuration:string;
     paymentStatus?: 'Pending' | 'Paid'|'Fail'; // Payment status (if approved)
     message: string; // Additional message from the tenant
    

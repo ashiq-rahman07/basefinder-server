@@ -80,34 +80,33 @@ const myProfile = async (authUser: IJwtPayload) => {
 
 }
 
-// const updateProfile = async (
-//    payload: Partial<ICustomer>,
-//    file: IImageFile,
-//    authUser: IJwtPayload
-// ) => {
-//    const isUserExists = await User.findById(authUser.userId);
+const updateProfile = async (
+   payload: Partial<IUser>,
+   userId: string
+) => {
+   const isUserExists = await User.findById(userId);
 
-//    if (!isUserExists) {
-//       throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
-//    }
-//    if (!isUserExists.isActive) {
-//       throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
-//    }
+   if (!isUserExists) {
+      throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
+   }
+   if (!isUserExists.isActive) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
+   }
 
-//    if (file && file.path) {
-//       payload.photo = file.path;
-//    }
+   // if (file && file.path) {
+   //    payload.photo = file.path;
+   // }
 
-//    const result = await Customer.findOneAndUpdate(
-//       { user: authUser.userId },
-//       payload,
-//       {
-//          new: true,
-//       }
-//    ).populate('user');
+   const result = await User.findOneAndUpdate(
+      { _id: userId },
+      payload,
+      {
+         new: true,
+      }
+   )
 
-//    return result;
-// };
+   return result;
+};
 
 // const updateUserStatus = async (userId: string) => {
 //    const user = await User.findById(userId);
@@ -127,7 +126,7 @@ export const UserServices = {
    getAllUser,
    myProfile,
 //    updateUserStatus,
-//    updateProfile,
+updateProfile,
 getSingleUser,
 deleteUser
 

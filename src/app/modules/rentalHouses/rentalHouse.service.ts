@@ -9,6 +9,7 @@ import { StatusCodes } from "http-status-codes";
 import { IJwtPayload } from "../auth/auth.interface";
 import User from "../user/user.model";
 import { Request } from "express";
+import RentalRequest from "../rentalRequest/rentalRequest.model";
 
 const createRentalHouse = async(houseData:Partial<IRentalHouse>,houseImages: IImageFiles,authUser: IJwtPayload)=>{
     const { images } = houseImages;
@@ -31,18 +32,43 @@ const createRentalHouse = async(houseData:Partial<IRentalHouse>,houseImages: IIm
 }
 
 const getAllRentalHouse  = async(query: Record<string, unknown>)=>{
-    
-       
+    // console.log(query);
+    const {
+        categories,
+        bedrooms,
+        minPrice,
+        maxPrice,
+        ...pQuery
+     } = query;
+ 
+     // Build the filter object
+     const filter: Record<string, any> = {};
+// console.log(categories);
+   // Filter by categories
+   if (categories) {
+    const categoryArray = typeof categories === 'string'
+       ? categories.split(',')
+       : Array.isArray(categories)
+          ? categories
+          : [categories];
+    filter.category = { $in: categoryArray };
+ }
+ if(bedrooms){
+    filter.bedrooms = { $in: bedrooms };
+ }
 
-
-    const RentalHouseQuery = new QueryBuilder(RentalHouse.find().populate('landlordUser').populate("category","_id name").setOptions({ strictPopulate: false }), query)
-    .search(RentalHouseSearchableFields)
+    const RentalHouseQuery = new QueryBuilder(RentalHouse.find(filter).populate('landlordUser').populate("category","_id name").setOptions({ strictPopulate: false }),  pQuery)
+    .search(['name','location'])
     .filter()
     .sort()
     .paginate()
-    .fields();
+    .fields()
+    .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity)
+    ;
+    
 
  const result = await RentalHouseQuery.modelQuery.populate('User');
+//  console.log(result);
  const meta = await RentalHouseQuery.countTotal();
  return {
     result,
@@ -70,17 +96,7 @@ const getAllHouseByUser  = async(req:Request)=>{
           .paginate()
           .fields();
         };
-        // If the user is a tenant, return an empty array or handle accordingly
-    //    console.log('lend and admin :',rentalHouses)
-
-
-    // const RentalHouseQuery = new QueryBuilder(RentalHouse.find().populate('landlordUser').populate("category","_id name").setOptions({ strictPopulate: false }), query)
-    // .search(RentalHouseSearchableFields)
-    // .filter()
-    // .sort()
-    // .paginate()
-    // .fields();
-// console.log(rentalHouses)
+       
  const result = await rentalHouses?.modelQuery.populate('User');
  const meta = await rentalHouses?.countTotal();
  return {
@@ -122,6 +138,7 @@ const updateRenTalHouseById = async(
 } 
 const deleteRenTalHouseById = async(id:string)=>{
     const rentalHouse = await RentalHouse.findByIdAndDelete(id);
+    await RentalRequest.deleteMany({ listingId:id });
     return rentalHouse;
 } 
  

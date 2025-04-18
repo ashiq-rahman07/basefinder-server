@@ -20,7 +20,7 @@ RentalHouseController.createRentalHouse
 );
 router.get('/landlords/listings/:id', RentalHouseController.getRenTalHouseById);
 
-router.delete('/landlords/listings/:id', auth(UserRole.ADMIN), RentalHouseController.deleteRenTalHouseById);
+router.delete('/landlords/listings/:id', auth(UserRole.ADMIN,UserRole.Landlord), RentalHouseController.deleteRenTalHouseById);
 router.patch('/landlords/listings/:houseId', auth(UserRole.ADMIN,UserRole.Landlord), 
 multerUpload.fields([{ name: 'images' }]),
 parseBody,

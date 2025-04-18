@@ -14,11 +14,18 @@ router.post(
   auth(UserRole.Tenant),
 RentalRequestController.createRentalRequest
 );
+router.get('/tenant', auth( UserRole.Tenant),RentalRequestController.getAllRentReqTenant);
+router.get('/landlord', auth( UserRole.Landlord),RentalRequestController.getAllRentalRequestLandlord);
+router.patch('/status/:requestId', auth(UserRole.Landlord),RentalRequestController.updateRequestStatus);
+router.get('/:listingId', auth(UserRole.Tenant),RentalRequestController.getRequestListingTent);
+
 router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant),RentalRequestController.getRenTalRequestById);
+
 
 router.delete('/:id', auth(UserRole.ADMIN), RentalRequestController.deleteRenTalRequestById);
 router.patch('/:id', auth(UserRole.ADMIN),RentalRequestController.updateRenTalRequestById);
-router.get('/landlord', auth( UserRole.Landlord),RentalRequestController.getAllRentalRequestLandlord);
+
+
 router.get('/', auth(UserRole.Tenant),RentalRequestController.getAllRentalRequest);
 
 export const RentalRequestRoutes = router;

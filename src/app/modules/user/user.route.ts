@@ -15,6 +15,7 @@ router.post(
   UserControllers.registerUserIntoDB,
 );
 router.get('/allusers', UserControllers.getAllUsers);
+router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
 router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.getSingleUsers);
 // router.patch(
 //   '/:id',
@@ -31,6 +32,7 @@ router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserC
 router.delete('/:id', auth(UserRole.ADMIN), UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
 router.get('/allusers', UserControllers.getAllUsers);
+router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
 router.get('/my-profile', UserControllers.myProfile);
 // router.patch(
 //   '/update/:id',

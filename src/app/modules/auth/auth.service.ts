@@ -117,10 +117,10 @@ const refreshToken = async (token: string) => {
 };
 
 const changePassword = async (
-   userData: JwtPayload,
+   userId: string,
    payload: { oldPassword: string; newPassword: string }
 ) => {
-   const { userId } = userData;
+  
    const { oldPassword, newPassword } = payload;
 
    const user = await User.findOne({ _id: userId });

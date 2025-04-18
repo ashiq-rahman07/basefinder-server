@@ -15,21 +15,23 @@ const createRentalRequest = catchAsync(async (req, res) => {
     });
   });
   
-const  approveRequest = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const { landlordPhoneNumber } = req.body;
-    const result = await RentalRequestServices.approveRequest(id,landlordPhoneNumber);
+
+  
+const getAllRentalRequest  = catchAsync(async (req, res) => {
+    const result = await RentalRequestServices.getAllRentalRequest(req.query);
   
     sendResponse(res, {
       success: true,
-      message: 'Rental Request Approved successfully',
+      message: 'Rental Request retrive successfully',
       statusCode: 201,
       data: result,
     });
   });
-  
-const getAllRentalRequest  = catchAsync(async (req, res) => {
-    const result = await RentalRequestServices.getAllRentalRequest(req.query);
+
+const getAllRentReqTenant  = catchAsync(async (req, res) => {
+    const {userId} = req.user;
+   
+    const result = await RentalRequestServices.getAllRentReqTenant(userId,req.query);
   
     sendResponse(res, {
       success: true,
@@ -42,6 +44,19 @@ const getAllRentalRequest  = catchAsync(async (req, res) => {
 const getAllRentalRequestLandlord  = catchAsync(async (req, res) => {
   const {userId}=req.user
     const result = await RentalRequestServices.getAllRentalRequestLandlord(userId);
+  
+    sendResponse(res, {
+      success: true,
+      message: 'Rental Request retrive successfully',
+      statusCode: 201,
+      data: result,
+    });
+  });
+const getRequestListingTent  = catchAsync(async (req, res) => {
+  const {userId}=req.user
+  const {listingId}= req.params
+  
+    const result = await RentalRequestServices.getRequestListingTent(userId,listingId);
   
     sendResponse(res, {
       success: true,
@@ -73,6 +88,19 @@ const updateRenTalRequestById  = catchAsync(async (req, res) => {
       data: result,
     });
   });
+  const  updateRequestStatus = catchAsync(async (req, res) => {
+   
+    const { requestId } = req.params;
+   
+      const result = await RentalRequestServices.updateRequestStatus(requestId,req.body);
+    
+      sendResponse(res, {
+        success: true,
+        message: 'Rental Request Approved successfully',
+        statusCode: 201,
+        data: result,
+      });
+    });
 const deleteRenTalRequestById  = catchAsync(async (req, res) => {
     const {id}= req.params
     const result = await RentalRequestServices.deleteRenTalRequestById(id);
@@ -93,5 +121,7 @@ const deleteRenTalRequestById  = catchAsync(async (req, res) => {
     getRenTalRequestById,
     updateRenTalRequestById,
     deleteRenTalRequestById,
-    approveRequest
+    updateRequestStatus,
+    getRequestListingTent,
+    getAllRentReqTenant 
 }

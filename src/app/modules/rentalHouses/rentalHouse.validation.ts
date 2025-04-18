@@ -9,6 +9,7 @@ const RentalHouseValidationSchema = z.object({
         rentAmount: z.number(),
         bedrooms: z.number(),
         bathrooms: z.number(),
+        amenities:z.array(z.string()).optional(),
         images: z.array(z.string()).optional(),
      // Assuming landlordId is a string representing an ObjectId
     })

@@ -14,7 +14,7 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
        status: {
           type: String,
           enum:['Pending','Approved','Rejected'],
-          default:'Pending'
+          required: true,
        },
        paymentStatus: {
           type: String,
@@ -25,6 +25,14 @@ const rentalRequestSchema = new Schema<IRentalRequest>(
           type: Schema.Types.ObjectId,
           required: true,
           ref:'User'
+       },
+       moveDate:{
+         type: Date,
+         required: true,
+       },
+       rentDuration:{
+         type:String,
+         required:true
        },
        message:{
          type:String,

@@ -51,17 +51,17 @@ const myProfile = catchAsync(async (req, res) => {
   });
 });
 
-// const updateUser = catchAsync(async (req, res) => {
-//   const { id } = req.params;
-//   const result = await UserServices.updateUser(id, req.body);
+const updateProfile = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  const result = await UserServices.updateProfile(req.body,userId);
 
-//   sendResponse(res, {
-//     success: true,
-//     message: 'User update successfully',
-//     statusCode: 201,
-//     data: result,
-//   });
-// });
+  sendResponse(res, {
+    success: true,
+    message: 'User update successfully',
+    statusCode: 201,
+    data: result,
+  });
+});
 // const updateUserStatus = catchAsync(async (req, res) => {
 //   const { userId } = req.params;
 //   console.log(userId, req.body);
@@ -86,11 +86,14 @@ const deleteUser = catchAsync(async (req, res) => {
   });
 });
 
+
+
+
 export const UserControllers = {
   registerUserIntoDB,
   getAllUsers,
   myProfile,
-//   updateUser,
+  updateProfile,
   deleteUser,
   getSingleUsers,
 //   updateUserStatus,

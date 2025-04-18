@@ -8,6 +8,7 @@ export interface IRentalHouse{
     rentAmount:number; 
     bedrooms:number;
     bathrooms:number;
+    amenities?:[string];
     images:Array<string>;
     landlordUser:ObjectId;
     isAvailable:boolean
