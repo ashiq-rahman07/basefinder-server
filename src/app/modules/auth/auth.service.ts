@@ -6,6 +6,7 @@ import { IAuth, IJwtPayload } from './auth.interface';
 import { createToken, verifyToken } from './auth.utils';
 import config from '../../config';
 import mongoose from 'mongoose';
+import { StringValue } from 'ms';
 import { JwtPayload, Secret } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -44,13 +45,13 @@ const loginUser = async (payload: IAuth) => {
       const accessToken = createToken(
          jwtPayload,
          config.jwt_access_secret as string,
-         config.jwt_access_expires_in as string
+         config.jwt_access_expires_in as number | StringValue
       );
 
       const refreshToken = createToken(
          jwtPayload,
          config.jwt_refresh_secret as string,
-         config.jwt_refresh_expires_in as string
+         config.jwt_refresh_expires_in as number | StringValue
       );
 
       // const updateUserInfo = await User.findByIdAndUpdate(
@@ -108,7 +109,7 @@ const refreshToken = async (token: string) => {
    const newAccessToken = createToken(
       jwtPayload,
       config.jwt_access_secret as Secret,
-      config.jwt_access_expires_in as string
+      config.jwt_access_expires_in as number | StringValue
    );
 
    return {
