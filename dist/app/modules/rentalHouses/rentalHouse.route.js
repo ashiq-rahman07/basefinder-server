@@ -1,0 +1,22 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RentalHouseRoutes = void 0;
+const express_1 = __importDefault(require("express"));
+const auth_1 = __importDefault(require("../../middleware/auth"));
+const validateRequest_1 = __importDefault(require("../../middleware/validateRequest"));
+const user_interface_1 = require("../user/user.interface");
+const rentalHose_controller_1 = require("./rentalHose.controller");
+const rentalHouse_validation_1 = require("./rentalHouse.validation");
+const multer_config_1 = require("../../config/multer.config");
+const bodyParser_1 = require("../../middleware/bodyParser");
+const router = express_1.default.Router();
+router.post('/landlords/listings', (0, auth_1.default)(user_interface_1.UserRole.Landlord), multer_config_1.multerUpload.fields([{ name: 'images' }]), bodyParser_1.parseBody, (0, validateRequest_1.default)(rentalHouse_validation_1.RentalHouseValidation.RentalHouseValidationSchema), rentalHose_controller_1.RentalHouseController.createRentalHouse);
+router.get('/landlords/listings/:id', rentalHose_controller_1.RentalHouseController.getRenTalHouseById);
+router.delete('/landlords/listings/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), rentalHose_controller_1.RentalHouseController.deleteRenTalHouseById);
+router.patch('/landlords/listings/:houseId', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), multer_config_1.multerUpload.fields([{ name: 'images' }]), bodyParser_1.parseBody, rentalHose_controller_1.RentalHouseController.updateRenTalHouseById);
+router.get('/landlords/listings', rentalHose_controller_1.RentalHouseController.getAllRentalHouse);
+router.get('/listings', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), rentalHose_controller_1.RentalHouseController.getAllHouseByUser);
+exports.RentalHouseRoutes = router;
