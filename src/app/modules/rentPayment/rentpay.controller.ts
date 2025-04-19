@@ -8,7 +8,7 @@ const rentPayment = catchAsync(async (req, res) => {
     const {userId} = req.user;
   
     const rentPayment = await RentPayService.rentPayment(userId, req.body, req.ip!);
-  // console.log(rentPayment);
+  console.log(rentPayment);
     sendResponse(res, {
       statusCode: 201,
       success: true,
