@@ -36,8 +36,6 @@ const getAllRentalHouse = (0, catchAsync_1.default)((req, res) => __awaiter(void
     });
 }));
 const getAllHouseByUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    //   const {user,query}=req
-    //  console.log(user)
     const result = yield rentalHouse_service_1.RentalHouseServices.getAllHouseByUser(req);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -48,7 +46,6 @@ const getAllHouseByUser = (0, catchAsync_1.default)((req, res) => __awaiter(void
 }));
 const getRenTalHouseById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    // console.log(id)
     const result = yield rentalHouse_service_1.RentalHouseServices.getRenTalHouseById(id);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -83,5 +80,5 @@ exports.RentalHouseController = {
     getRenTalHouseById,
     updateRenTalHouseById,
     deleteRenTalHouseById,
-    getAllHouseByUser
+    getAllHouseByUser,
 };

@@ -14,6 +14,7 @@ const user_interface_1 = require("./user.interface");
 // import auth from '../../middlewares/auth';
 const router = express_1.default.Router();
 router.post('/register', (0, validateRequest_1.default)(user_validation_1.UserValidation.userValidationSchema), user_controller_1.UserControllers.registerUserIntoDB);
+router.get('/my-profile', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord, user_interface_1.UserRole.Tenant), user_controller_1.UserControllers.myProfile);
 router.get('/allusers', user_controller_1.UserControllers.getAllUsers);
 router.post('/update-profile', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord, user_interface_1.UserRole.Tenant), user_controller_1.UserControllers.updateProfile);
 router.get('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord, user_interface_1.UserRole.Tenant), user_controller_1.UserControllers.getSingleUsers);
@@ -23,17 +24,11 @@ router.get('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_int
 //   validateRequest(UserValidation.userUpdateValidationSchema),
 //   UserControllers.updateUser,
 // );
-// router.patch(
-//   '/status/:userId',
-//   auth('admin'),
-//   validateRequest(UserValidation.userUpdateValidationSchema),
-//   UserControllers.updateUserStatus,
-// );
+router.patch('/status/:userId', (0, auth_1.default)(user_interface_1.UserRole.ADMIN), user_controller_1.UserControllers.updateUserStatus);
 router.delete('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN), user_controller_1.UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
 router.get('/allusers', user_controller_1.UserControllers.getAllUsers);
 router.post('/update-profile', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord, user_interface_1.UserRole.Tenant), user_controller_1.UserControllers.updateProfile);
-router.get('/my-profile', user_controller_1.UserControllers.myProfile);
 // router.patch(
 //   '/update/:id',
 //   validateRequest(UserValidation.userUpdateValidationSchema),

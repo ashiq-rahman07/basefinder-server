@@ -12,12 +12,24 @@ const router = express.Router();
 router.post(
   '/register',
   validateRequest(UserValidation.userValidationSchema),
-  UserControllers.registerUserIntoDB,
+  UserControllers.registerUserIntoDB
 );
-router.get('/my-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.myProfile);
+router.get(
+  '/my-profile',
+  auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
+  UserControllers.myProfile
+);
 router.get('/allusers', UserControllers.getAllUsers);
-router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
-router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.getSingleUsers);
+router.post(
+  '/update-profile',
+  auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
+  UserControllers.updateProfile
+);
+router.get(
+  '/:id',
+  auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
+  UserControllers.getSingleUsers
+);
 // router.patch(
 //   '/:id',
 //   auth('admin', 'customer'),
@@ -28,12 +40,16 @@ router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserC
 router.patch(
   '/status/:userId',
   auth(UserRole.ADMIN),
-  UserControllers.updateUserStatus,
+  UserControllers.updateUserStatus
 );
 router.delete('/:id', auth(UserRole.ADMIN), UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
 router.get('/allusers', UserControllers.getAllUsers);
-router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
+router.post(
+  '/update-profile',
+  auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
+  UserControllers.updateProfile
+);
 
 // router.patch(
 //   '/update/:id',

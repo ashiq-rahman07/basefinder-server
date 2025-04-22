@@ -7,85 +7,83 @@ import { StatusCodes } from 'http-status-codes';
 
 // Create the User schema based on the interface
 const userSchema = new Schema<IUser, UserModel>(
-   {
-      name: {
-         type: String,
-         required: true,
-      },
-      email: {
-         type: String,
-         required: true,
-         unique: true,
-         lowercase: true,
-      },
-      password: {
-         type: String,
-         required: true,
-      },
-      role: {
-         type: String,
-         enum: [UserRole.ADMIN, UserRole.Tenant,UserRole.Landlord],
-         default: UserRole.Tenant,
-      },
-   
-   
-      isActive: {
-         type: Boolean,
-         default: true,
-      },
-   
-   },
-   {
-      timestamps: true,
-   }
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: [UserRole.ADMIN, UserRole.Tenant, UserRole.Landlord],
+      default: UserRole.Tenant,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
 userSchema.pre('save', async function (next) {
-   const user = this;
+  const user = this;
 
-   user.password = await bcrypt.hash(
-      user.password,
-      Number(config.bcrypt_salt_rounds)
-   );
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
 
-   next();
+  next();
 });
 
 userSchema.post('save', function (doc, next) {
-   doc.password = '';
-   next();
+  doc.password = '';
+  next();
 });
 
 userSchema.set('toJSON', {
-   transform: (_doc, ret) => {
-      delete ret.password;
-      return ret;
-   },
+  transform: (_doc, ret) => {
+    delete ret.password;
+    return ret;
+  },
 });
 
 userSchema.statics.isPasswordMatched = async function (
-   plainTextPassword,
-   hashedPassword
+  plainTextPassword,
+  hashedPassword
 ) {
-   return await bcrypt.compare(plainTextPassword, hashedPassword);
+  return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
 userSchema.statics.isUserExistsByEmail = async function (email: string) {
-   return await User.findOne({ email }).select('+password');
+  return await User.findOne({ email }).select('+password');
 };
 
 userSchema.statics.checkUserExist = async function (userId: string) {
-   const existingUser = await this.findById(userId);
+  const existingUser = await this.findById(userId);
 
-   if (!existingUser) {
-      throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User does not exist!');
-   }
+  if (!existingUser) {
+    throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User does not exist!');
+  }
 
-   if (!existingUser.isActive) {
-      throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User is not active!');
-   }
+  if (!existingUser.isActive) {
+    throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'User is not active!');
+  }
 
-   return existingUser;
+  return existingUser;
 };
 
 const User = mongoose.model<IUser, UserModel>('User', userSchema);

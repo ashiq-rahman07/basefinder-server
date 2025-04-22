@@ -9,30 +9,34 @@ import { categoryValidation } from './category.validation';
 
 const router = Router();
 
-router.get("/", CategoryController.getAllCategory)
-router.get('/created-user',auth(UserRole.ADMIN,UserRole.Landlord),CategoryController.getAllCategoryUser);
+router.get('/', CategoryController.getAllCategory);
+router.get(
+  '/created-user',
+  auth(UserRole.ADMIN, UserRole.Landlord),
+  CategoryController.getAllCategoryUser
+);
 router.post(
-    '/',
-    auth(UserRole.ADMIN, UserRole.Landlord),
-    multerUpload.single('icon'),
-    parseBody,
-    validateRequest(categoryValidation.createCategoryValidationSchema),
-    CategoryController.createCategory
+  '/',
+  auth(UserRole.ADMIN, UserRole.Landlord),
+  multerUpload.single('icon'),
+  parseBody,
+  validateRequest(categoryValidation.createCategoryValidationSchema),
+  CategoryController.createCategory
 );
 
 router.patch(
-    '/:id',
-    auth(UserRole.ADMIN, UserRole.Landlord),
-    multerUpload.single('icon'),
-    parseBody,
-    validateRequest(categoryValidation.updateCategoryValidationSchema),
-    CategoryController.updateCategory
-)
+  '/:id',
+  auth(UserRole.ADMIN, UserRole.Landlord),
+  multerUpload.single('icon'),
+  parseBody,
+  validateRequest(categoryValidation.updateCategoryValidationSchema),
+  CategoryController.updateCategory
+);
 
 router.delete(
-    '/:id',
-    auth(UserRole.ADMIN, UserRole.Landlord),
-    CategoryController.deleteCategory
-)
+  '/:id',
+  auth(UserRole.ADMIN, UserRole.Landlord),
+  CategoryController.deleteCategory
+);
 // router.get('/created-user',auth(UserRole.ADMIN,UserRole.Landlord),CategoryController.getAllCategoryUser);
 export const CategoryRoutes = router;

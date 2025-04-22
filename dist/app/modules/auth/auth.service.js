@@ -20,8 +20,6 @@ const auth_utils_1 = require("./auth.utils");
 const config_1 = __importDefault(require("../../config"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
-// import { generateOtp } from '../../utils/generateOtp';
-// import { EmailHelper } from '../../utils/emailHelper';
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     try {
@@ -179,7 +177,10 @@ const resetPassword = (_a) => __awaiter(void 0, [_a], void 0, function* ({ token
     try {
         session.startTransaction();
         const decodedData = (0, auth_utils_1.verifyToken)(token, config_1.default.jwt_pass_reset_secret);
-        const user = yield user_model_1.default.findOne({ email: decodedData.email, isActive: true }).session(session);
+        const user = yield user_model_1.default.findOne({
+            email: decodedData.email,
+            isActive: true,
+        }).session(session);
         if (!user) {
             throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'User not found');
         }

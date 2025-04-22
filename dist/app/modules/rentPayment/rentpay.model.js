@@ -12,6 +12,11 @@ const PaymentSchema = new mongoose_1.Schema({
         ref: 'RentalHouse',
         required: true,
     },
+    requestId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'RentalHouse',
+        required: true,
+    },
     rentAmount: {
         type: Number,
         required: true,

@@ -1,5 +1,1 @@
-export const RentalHouseSearchableFields = [
-    'location',
-    'name',
-    'rentAmount'
-];
+export const RentalHouseSearchableFields = ['location', 'name', 'rentAmount'];

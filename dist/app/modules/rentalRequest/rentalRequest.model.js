@@ -39,7 +39,7 @@ const rentalRequestSchema = new mongoose_1.Schema({
     listingId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'RentalHouse'
+        ref: 'RentalHouse',
     },
     status: {
         type: String,
@@ -48,13 +48,13 @@ const rentalRequestSchema = new mongoose_1.Schema({
     },
     paymentStatus: {
         type: String,
-        enum: ["Pending", "Paid", "Failed"],
-        default: "Pending"
+        enum: ['Pending', 'Paid', 'Failed'],
+        default: 'Pending',
     },
     tenantId: {
         type: mongoose_1.Schema.Types.ObjectId,
         required: true,
-        ref: 'User'
+        ref: 'User',
     },
     moveDate: {
         type: Date,
@@ -62,11 +62,11 @@ const rentalRequestSchema = new mongoose_1.Schema({
     },
     rentDuration: {
         type: String,
-        required: true
+        required: true,
     },
     message: {
         type: String,
-        required: true
+        required: true,
     },
     landlordPhone: { type: String },
 }, {

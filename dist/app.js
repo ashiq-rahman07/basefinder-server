@@ -12,23 +12,22 @@ const routes_1 = __importDefault(require("./app/routes"));
 const globalErrorHandler_1 = __importDefault(require("./app/middleware/globalErrorHandler"));
 const notFound_1 = __importDefault(require("./app/middleware/notFound"));
 const app = (0, express_1.default)();
-// Middleware setup
 app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use("/api/v1", routes_1.default);
+app.use('/api/v1', routes_1.default);
 // Test route
-app.get("/", (req, res, next) => {
+app.get('/', (req, res) => {
     const currentDateTime = new Date().toISOString();
-    const clientIp = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     const serverHostname = os_1.default.hostname();
     const serverPlatform = os_1.default.platform();
     const serverUptime = os_1.default.uptime();
     res.status(http_status_codes_1.StatusCodes.OK).json({
         success: true,
-        message: "Welcome to the Base Finder",
-        version: "1.0.0",
+        message: 'Welcome to the Base Finder',
+        version: '1.0.0',
         clientDetails: {
             ipAddress: clientIp,
             accessedAt: currentDateTime,
@@ -39,8 +38,8 @@ app.get("/", (req, res, next) => {
             uptime: `${Math.floor(serverUptime / 60 / 60)} hours ${Math.floor((serverUptime / 60) % 60)} minutes`,
         },
         developerContact: {
-            email: "web3.0.ashiq@gmail.com",
-            github: "https://github.com/ashiq-rahman07",
+            email: 'web3.0.ashiq@gmail.com',
+            github: 'https://github.com/ashiq-rahman07',
         },
     });
 });

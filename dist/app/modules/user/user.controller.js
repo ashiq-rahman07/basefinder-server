@@ -13,13 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserControllers = void 0;
-// import httpStatus from 'http-status';
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const user_service_1 = require("./user.service");
-// import { User } from './user.model';
-// import { string } from 'zod';
 const registerUserIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.UserServices.registerUser(req.body);
     (0, sendResponse_1.default)(res, {
@@ -67,17 +64,16 @@ const updateProfile = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
-// const updateUserStatus = catchAsync(async (req, res) => {
-//   const { userId } = req.params;
-//   console.log(userId, req.body);
-//   const result = await UserServices.updateUserStatus(userId, req.body);
-//   sendResponse(res, {
-//     success: true,
-//     message: 'User update successfully',
-//     statusCode: 201,
-//     data: result,
-//   });
-// });
+const updateUserStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserServices.updateUserStatus(userId);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        message: 'User update successfully',
+        statusCode: 201,
+        data: result,
+    });
+}));
 const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const result = yield user_service_1.UserServices.deleteUser(id);
@@ -85,7 +81,7 @@ const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         success: true,
         message: 'User delete successfully',
         statusCode: 201,
-        data: result,
+        data: result.message,
     });
 }));
 exports.UserControllers = {
@@ -95,5 +91,5 @@ exports.UserControllers = {
     updateProfile,
     deleteUser,
     getSingleUsers,
-    //   updateUserStatus,
+    updateUserStatus,
 };

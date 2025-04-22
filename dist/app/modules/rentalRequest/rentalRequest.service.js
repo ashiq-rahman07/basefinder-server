@@ -44,7 +44,7 @@ const getAllRentReqTenant = (tenantId, query) => __awaiter(void 0, void 0, void 
         .sort()
         .paginate()
         .fields();
-    const result = yield RentalRequestQuery.modelQuery.populate('listingId', 'name location rentAmount');
+    const result = yield RentalRequestQuery.modelQuery.populate('listingId', 'name location rentAmount images');
     const meta = yield RentalRequestQuery.countTotal();
     return {
         result,
@@ -54,7 +54,9 @@ const getAllRentReqTenant = (tenantId, query) => __awaiter(void 0, void 0, void 
 const getAllRentalRequestLandlord = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const listings = yield rentalHose_model_1.default.find({ landlordUser: userId }).select('_id');
     const listingIds = listings.map((listing) => listing._id);
-    const result = yield rentalRequest_model_1.default.find({ listingId: { $in: listingIds } }).populate('listingId', 'location name rentAmount').populate('tenantId', 'name email');
+    const result = yield rentalRequest_model_1.default.find({ listingId: { $in: listingIds } })
+        .populate('listingId', 'location name rentAmount images')
+        .populate('tenantId', 'name email');
     return result;
 });
 const getRequestListingTent = (tenantId, listingId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -86,7 +88,7 @@ const updateRequestStatus = (id, payload) => __awaiter(void 0, void 0, void 0, f
         // res.status(200).json({ success: true, data: updatedRequest });
         const result = {
             success: true,
-            data: updatedRequest
+            data: updatedRequest,
         };
         return result;
     }
@@ -96,7 +98,9 @@ const updateRequestStatus = (id, payload) => __awaiter(void 0, void 0, void 0, f
     }
 });
 const updateRenTalRequestById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const rentalRequest = yield rentalRequest_model_1.default.findByIdAndUpdate(id, payload, { new: true });
+    const rentalRequest = yield rentalRequest_model_1.default.findByIdAndUpdate(id, payload, {
+        new: true,
+    });
     return rentalRequest;
 });
 const deleteRenTalRequestById = (id) => __awaiter(void 0, void 0, void 0, function* () {
@@ -112,5 +116,5 @@ exports.RentalRequestServices = {
     updateRequestStatus,
     getAllRentalRequestLandlord,
     getRequestListingTent,
-    getAllRentReqTenant
+    getAllRentReqTenant,
 };

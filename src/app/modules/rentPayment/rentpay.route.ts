@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { RentPayController } from './rentpay.controller';
 import auth from '../../middleware/auth';
@@ -6,16 +5,27 @@ import { UserRole } from '../user/user.interface';
 
 const router = express.Router();
 
-router.post('/create-payment', auth(UserRole.Tenant), RentPayController.rentPayment);
+router.post(
+  '/create-payment',
+  auth(UserRole.Tenant),
+  RentPayController.rentPayment
+);
 router.get(
-    '/verify',
-    auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord),
-    RentPayController.verifyPayment,
-  );
-  router.get('/request/:id', auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord), RentPayController.getRentPayByReqId);
+  '/verify',
+  auth(UserRole.Tenant, UserRole.ADMIN, UserRole.Landlord),
+  RentPayController.verifyPayment
+);
+router.get(
+  '/request/:id',
+  auth(UserRole.Tenant, UserRole.ADMIN, UserRole.Landlord),
+  RentPayController.getRentPayByReqId
+);
 
-router.get('/:id', auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord), RentPayController.getRentPayById);
-
+router.get(
+  '/:id',
+  auth(UserRole.Tenant, UserRole.ADMIN, UserRole.Landlord),
+  RentPayController.getRentPayById
+);
 
 //   '/verify',
 //   auth('admin', 'customer'),

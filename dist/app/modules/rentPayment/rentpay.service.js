@@ -20,9 +20,7 @@ const user_model_1 = __importDefault(require("../user/user.model"));
 const rentpay_model_1 = __importDefault(require("./rentpay.model"));
 const rentpay_utils_1 = require("./rentpay.utils");
 const rentPayment = (tenant, payload, client_ip) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log(tenant);
-    console.log(payload, "payload");
-    const { listingId, rentAmount } = payload;
+    const { listingId, rentAmount, requestId } = payload;
     try {
         const listing = yield rentalHose_model_1.default.findById(listingId);
         if (!listing) {
@@ -32,7 +30,8 @@ const rentPayment = (tenant, payload, client_ip) => __awaiter(void 0, void 0, vo
         let rentPay = yield rentpay_model_1.default.create({
             tenant,
             listing: listingId,
-            rentAmount
+            requestId,
+            rentAmount,
         });
         // payment integration
         const shurjopayPayload = {
@@ -62,7 +61,17 @@ const rentPayment = (tenant, payload, client_ip) => __awaiter(void 0, void 0, vo
     }
 });
 const getRentPayById = (tenantId, id) => __awaiter(void 0, void 0, void 0, function* () {
-    const paymentInfo = yield rentpay_model_1.default.findOne({ 'transaction.id': id, tenant: tenantId });
+    const paymentInfo = yield rentpay_model_1.default.findOne({
+        'transaction.id': id,
+        tenant: tenantId,
+    });
+    return paymentInfo;
+});
+const getRentPayByReqId = (tenantId, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const paymentInfo = yield rentpay_model_1.default.findOne({
+        requestId: id,
+        tenant: tenantId,
+    });
     return paymentInfo;
 });
 const verifyPayment = (order_id, userId) => __awaiter(void 0, void 0, void 0, function* () {
@@ -87,11 +96,13 @@ const verifyPayment = (order_id, userId) => __awaiter(void 0, void 0, void 0, fu
         });
     }
     if (verifiedPayment[0].bank_status == 'Success') {
-        const paymentData = yield rentpay_model_1.default.findOne({ 'transaction.id': order_id });
+        const paymentData = yield rentpay_model_1.default.findOne({
+            'transaction.id': order_id,
+        });
         yield rentalRequest_model_1.default.findOneAndUpdate({
             listingId: paymentData === null || paymentData === void 0 ? void 0 : paymentData.listing,
             tenantId: userId,
-            status: { $ne: 'Rejected' }
+            status: { $ne: 'Rejected' },
         }, { $set: { paymentStatus: 'Paid' } }, { new: true });
     }
     return verifiedPayment;
@@ -99,5 +110,6 @@ const verifyPayment = (order_id, userId) => __awaiter(void 0, void 0, void 0, fu
 exports.RentPayService = {
     rentPayment,
     getRentPayById,
-    verifyPayment
+    getRentPayByReqId,
+    verifyPayment,
 };

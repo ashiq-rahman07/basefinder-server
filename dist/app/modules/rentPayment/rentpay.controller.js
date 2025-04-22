@@ -19,7 +19,6 @@ const rentpay_service_1 = require("./rentpay.service");
 const rentPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.user;
     const rentPayment = yield rentpay_service_1.RentPayService.rentPayment(userId, req.body, req.ip);
-    console.log(rentPayment);
     (0, sendResponse_1.default)(res, {
         statusCode: 201,
         success: true,
@@ -30,7 +29,17 @@ const rentPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 const getRentPayById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const { userId } = req.user;
-    // console.log(id)
+    const result = yield rentpay_service_1.RentPayService.getRentPayById(userId, id);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        message: 'PaymentInfo retrive successfully',
+        statusCode: 201,
+        data: result,
+    });
+}));
+const getRentPayByReqId = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const { userId } = req.user;
     const result = yield rentpay_service_1.RentPayService.getRentPayById(userId, id);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -53,5 +62,6 @@ const verifyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 exports.RentPayController = {
     rentPayment,
     getRentPayById,
-    verifyPayment
+    getRentPayByReqId,
+    verifyPayment,
 };

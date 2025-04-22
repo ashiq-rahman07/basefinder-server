@@ -37,8 +37,6 @@ const getAllCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const getAllCategoryUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { user } = req;
-    //  console.log("get cat user",user)
     const result = yield category_service_1.CategoryService.getAllCategoryByUser(req);
     (0, sendResponse_1.default)(res, {
         success: true,
@@ -72,5 +70,5 @@ exports.CategoryController = {
     getAllCategory,
     updateCategory,
     deleteCategory,
-    getAllCategoryUser
+    getAllCategoryUser,
 };

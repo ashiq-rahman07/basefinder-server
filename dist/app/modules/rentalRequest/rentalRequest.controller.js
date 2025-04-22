@@ -115,5 +115,5 @@ exports.RentalRequestController = {
     deleteRenTalRequestById,
     updateRequestStatus,
     getRequestListingTent,
-    getAllRentReqTenant
+    getAllRentReqTenant,
 };

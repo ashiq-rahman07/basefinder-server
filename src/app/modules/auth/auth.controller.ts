@@ -1,28 +1,28 @@
-import { Request, Response } from "express";
-import { AuthService } from "./auth.service";
-import sendResponse from "../../utils/sendResponse";
-import catchAsync from "../../utils/catchAsync";
-import { StatusCodes } from "http-status-codes";
-import config from "../../config";
+import { Request, Response } from 'express';
+import { AuthService } from './auth.service';
+import sendResponse from '../../utils/sendResponse';
+import catchAsync from '../../utils/catchAsync';
+import { StatusCodes } from 'http-status-codes';
+import config from '../../config';
 
 const loginUser = catchAsync(async (req, res) => {
   const result = await AuthService.loginUser(req.body);
   const { refreshToken, accessToken } = result;
 
-  res.cookie("refreshToken", refreshToken, {
-    secure: config.NODE_ENV === "production",
+  res.cookie('refreshToken', refreshToken, {
+    secure: config.NODE_ENV === 'production',
     httpOnly: true,
-    sameSite: "none",
+    sameSite: 'none',
     maxAge: 1000 * 60 * 60 * 24 * 365,
   });
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "User logged in successfully!",
+    message: 'User logged in successfully!',
     data: {
       accessToken,
-      refreshToken
+      refreshToken,
     },
   });
 });
@@ -35,14 +35,14 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: 200,
     success: true,
-    message: "User logged in successfully!",
+    message: 'User logged in successfully!',
     data: result,
   });
 });
 
 // change password
 const changePassword = catchAsync(async (req: Request, res: Response) => {
-  const {userId} = req.user;
+  const { userId } = req.user;
   const payload = req.body;
 
   await AuthService.changePassword(userId, payload);
@@ -50,7 +50,7 @@ const changePassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Password changed successfully!",
+    message: 'Password changed successfully!',
     data: null,
   });
 });
@@ -87,7 +87,7 @@ const resetPassword = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Password reset successfully!",
+    message: 'Password reset successfully!',
     data: result,
   });
 });

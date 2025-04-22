@@ -1,28 +1,27 @@
-import { Schema, model, Document, Types } from "mongoose";
-import { ICategory } from "./category.interface";
+import { Schema, model, Document } from 'mongoose';
+import { ICategory } from './category.interface';
 
 // Extend Mongoose Document with ICategory
-interface ICategoryDocument extends Document, ICategory { }
+interface ICategoryDocument extends Document, ICategory {}
 
 // Define the schema
 const categorySchema = new Schema<ICategoryDocument>(
   {
     name: {
       type: String,
-      required: [true, "Category name is required"],
+      required: [true, 'Category name is required'],
       unique: true,
       trim: true,
     },
-  
+
     description: {
       type: String,
       trim: true,
     },
- 
-   
+
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: 'User',
       required: true,
     },
     icon: {
@@ -35,6 +34,4 @@ const categorySchema = new Schema<ICategoryDocument>(
   }
 );
 
-
-
-export const Category = model<ICategoryDocument>("Category", categorySchema);
+export const Category = model<ICategoryDocument>('Category', categorySchema);

@@ -21,19 +21,19 @@ const config_1 = __importDefault(require("../../config"));
 const loginUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield auth_service_1.AuthService.loginUser(req.body);
     const { refreshToken, accessToken } = result;
-    res.cookie("refreshToken", refreshToken, {
-        secure: config_1.default.NODE_ENV === "production",
+    res.cookie('refreshToken', refreshToken, {
+        secure: config_1.default.NODE_ENV === 'production',
         httpOnly: true,
-        sameSite: "none",
+        sameSite: 'none',
         maxAge: 1000 * 60 * 60 * 24 * 365,
     });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "User logged in successfully!",
+        message: 'User logged in successfully!',
         data: {
             accessToken,
-            refreshToken
+            refreshToken,
         },
     });
 }));
@@ -43,7 +43,7 @@ const refreshToken = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     (0, sendResponse_1.default)(res, {
         statusCode: 200,
         success: true,
-        message: "User logged in successfully!",
+        message: 'User logged in successfully!',
         data: result,
     });
 }));
@@ -55,7 +55,7 @@ const changePassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Password changed successfully!",
+        message: 'Password changed successfully!',
         data: null,
     });
 }));
@@ -85,7 +85,7 @@ const resetPassword = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Password reset successfully!",
+        message: 'Password reset successfully!',
         data: result,
     });
 }));

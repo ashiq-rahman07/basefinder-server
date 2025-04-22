@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 // Create a transporter object using SMTP
 const transporter = nodemailer_1.default.createTransport({
-    service: "gmail", // Use Gmail or any other email service
+    service: 'gmail', // Use Gmail or any other email service
     auth: {
         user: process.env.EMAIL_USER, // Your email address
         pass: process.env.EMAIL_PASSWORD, // Your email password or app-specific password

@@ -46,7 +46,7 @@ const rentalHoseSchema = new mongoose_1.Schema({
     },
     category: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'Category'
+        ref: 'Category',
     },
     description: {
         type: String,
@@ -66,15 +66,15 @@ const rentalHoseSchema = new mongoose_1.Schema({
         required: true,
     },
     amenities: {
-        type: [String]
+        type: [String],
     },
     images: {
         type: [String],
-        required: true
+        required: true,
     },
     landlordUser: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
     },
     isAvailable: { type: Boolean, default: true },
 }, {

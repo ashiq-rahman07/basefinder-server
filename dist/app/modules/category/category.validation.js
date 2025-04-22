@@ -6,23 +6,23 @@ const createCategoryValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z
             .string()
-            .nonempty("Category name is required")
-            .max(100, "Category name should not exceed 100 characters"),
+            .nonempty('Category name is required')
+            .max(100, 'Category name should not exceed 100 characters'),
         description: zod_1.z.string().optional(),
-    })
+    }),
 });
 const updateCategoryValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         name: zod_1.z
             .string()
-            .max(100, "Category name should not exceed 100 characters")
+            .max(100, 'Category name should not exceed 100 characters')
             .optional(),
         description: zod_1.z.string().optional(),
         parent: zod_1.z.string().optional().nullable(),
-        isActive: zod_1.z.boolean().optional()
-    })
+        isActive: zod_1.z.boolean().optional(),
+    }),
 });
 exports.categoryValidation = {
     createCategoryValidationSchema,
-    updateCategoryValidationSchema
+    updateCategoryValidationSchema,
 };

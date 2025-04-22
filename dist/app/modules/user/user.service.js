@@ -19,12 +19,12 @@ const appError_1 = __importDefault(require("../../errors/appError"));
 const http_status_codes_1 = require("http-status-codes");
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const user_constant_1 = require("./user.constant");
-// Function to register user
+const rentalHose_model_1 = __importDefault(require("../rentalHouses/rentalHose.model"));
+const rentalRequest_model_1 = __importDefault(require("../rentalRequest/rentalRequest.model"));
 const registerUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     if ([user_interface_1.UserRole.ADMIN].includes(userData.role)) {
         throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_ACCEPTABLE, 'Invalid role. Only User is allowed.');
     }
-    // Check if the user already exists by email
     const existingUser = yield user_model_1.default.findOne({ email: userData.email });
     if (existingUser) {
         throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_ACCEPTABLE, 'Email is already registered');
@@ -50,28 +50,28 @@ const getSingleUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const user = user_model_1.default.findById(id);
     return user;
 });
-const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = user_model_1.default.findOneAndDelete({ id });
-    return user;
-});
+// const deleteUser = async (id:string) => {
+//    const user = User.findOneAndDelete({id})
+//   return user
+// };
 const myProfile = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
-    const isUserExists = yield user_model_1.default.findById(authUser.userId);
-    if (!isUserExists) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User not found!");
-    }
-    if (!isUserExists.isActive) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "User is not active!");
-    }
-    const profile = yield user_model_1.default.findOne({ user: isUserExists._id });
-    return Object.assign(Object.assign({}, isUserExists.toObject()), { profile: profile || null });
+    const result = yield user_model_1.default.findById(authUser.userId).select('-password');
+    // if (!isUserExists) {
+    //    throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
+    // }
+    // if (!isUserExists.isActive) {
+    //    throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
+    // }
+    // const profile = await User.findOne({ user: isUserExists._id }).select('password');
+    return result;
 });
 const updateProfile = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const isUserExists = yield user_model_1.default.findById(userId);
     if (!isUserExists) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "User not found!");
+        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'User not found!');
     }
     if (!isUserExists.isActive) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "User is not active!");
+        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'User is not active!');
     }
     // if (file && file.path) {
     //    payload.photo = file.path;
@@ -81,22 +81,48 @@ const updateProfile = (payload, userId) => __awaiter(void 0, void 0, void 0, fun
     });
     return result;
 });
-// const updateUserStatus = async (userId: string) => {
-//    const user = await User.findById(userId);
-//    console.log('comes here');
-//    if (!user) {
-//       throw new AppError(StatusCodes.NOT_FOUND, 'User is not found');
-//    }
-//    user.isActive = !user.isActive;
-//    const updatedUser = await user.save();
-//    return updatedUser;
-// };
+const updateUserStatus = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.default.findById(userId);
+    if (!user) {
+        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'User is not found');
+    }
+    user.isActive = !user.isActive;
+    const updatedUser = yield user.save();
+    return updatedUser;
+});
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield user_model_1.default.findById(id);
+        if ((user === null || user === void 0 ? void 0 : user.role) == 'tenant') {
+            yield user_model_1.default.findByIdAndDelete(id);
+            return {
+                message: 'user delete also request listing and request delete create by user',
+            };
+        }
+        //  Delete all listings created by the user
+        const listings = yield rentalHose_model_1.default.find({ landlordUser: id });
+        for (const listing of listings) {
+            // Delete all requests associated with each listing
+            yield rentalRequest_model_1.default.deleteMany({ listingId: listing._id });
+        }
+        // Delete listings
+        yield rentalHose_model_1.default.deleteMany({ landlordUser: id });
+        // Delete user
+        yield user_model_1.default.findByIdAndDelete(id);
+        return {
+            message: 'user delete also reted listing and request delete create by user',
+        };
+    }
+    catch (error) {
+        return { message: error.message };
+    }
+});
 exports.UserServices = {
     registerUser,
     getAllUser,
     myProfile,
-    //    updateUserStatus,
+    updateUserStatus,
     updateProfile,
     getSingleUser,
-    deleteUser
+    deleteUser,
 };

@@ -11,15 +11,15 @@ const router = Router();
 router.post('/login', AuthController.loginUser);
 
 router.post(
-   '/refresh-token',
-   // validateRequest(AuthValidation.refreshTokenZodSchema),
-   AuthController.refreshToken
+  '/refresh-token',
+  // validateRequest(AuthValidation.refreshTokenZodSchema),
+  AuthController.refreshToken
 );
 
 router.post(
-   '/change-password',
-   auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant),
-   AuthController.changePassword
+  '/change-password',
+  auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
+  AuthController.changePassword
 );
 
 // router.post('/forgot-password', AuthController.forgotPassword);

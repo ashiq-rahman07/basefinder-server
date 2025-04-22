@@ -6,7 +6,7 @@ const mongoose_1 = require("mongoose");
 const categorySchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: [true, "Category name is required"],
+        required: [true, 'Category name is required'],
         unique: true,
         trim: true,
     },
@@ -16,7 +16,7 @@ const categorySchema = new mongoose_1.Schema({
     },
     createdBy: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true,
     },
     icon: {
@@ -26,4 +26,4 @@ const categorySchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-exports.Category = (0, mongoose_1.model)("Category", categorySchema);
+exports.Category = (0, mongoose_1.model)('Category', categorySchema);

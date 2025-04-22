@@ -1,4 +1,1 @@
-export const RentalRequestSearchableFields = [
-    'listingId',
-   'tenantId'
-];
+export const RentalRequestSearchableFields = ['listingId', 'tenantId'];

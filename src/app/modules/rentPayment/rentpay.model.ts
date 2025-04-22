@@ -1,6 +1,5 @@
-import  { model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { IPayment } from './rentpay.interface';
-
 
 const PaymentSchema = new Schema<IPayment>(
   {
@@ -9,17 +8,17 @@ const PaymentSchema = new Schema<IPayment>(
       ref: 'User',
       required: true,
     },
-    listing:{
-        type: Schema.Types.ObjectId,
-        ref: 'RentalHouse',
-        required: true,
-      },
-      requestId:{
-        type: Schema.Types.ObjectId,
-        ref: 'RentalHouse',
-        required: true,
-      },
-      rentAmount: {
+    listing: {
+      type: Schema.Types.ObjectId,
+      ref: 'RentalHouse',
+      required: true,
+    },
+    requestId: {
+      type: Schema.Types.ObjectId,
+      ref: 'RentalHouse',
+      required: true,
+    },
+    rentAmount: {
       type: Number,
       required: true,
     },
@@ -44,7 +43,7 @@ const PaymentSchema = new Schema<IPayment>(
     toJSON: {
       virtuals: true,
     },
-  },
+  }
 );
 
 const RentPayment = model<IPayment>('RentPayment', PaymentSchema);

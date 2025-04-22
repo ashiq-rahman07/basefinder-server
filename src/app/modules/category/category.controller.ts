@@ -4,11 +4,10 @@ import { CategoryService } from './category.service';
 import { IImageFile } from '../../interface/IImageFile';
 import sendResponse from '../../utils/sendResponse';
 import { StatusCodes } from 'http-status-codes';
-// import { IUser } from '../user/user.interface';
+
 import { IJwtPayload } from '../auth/auth.interface';
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-
   const result = await CategoryService.createCategory(
     req.body,
     req.file as IImageFile,
@@ -34,18 +33,16 @@ const getAllCategory = catchAsync(async (req, res) => {
     data: result.result,
   });
 });
-const getAllCategoryUser  = catchAsync(async (req, res) => {
-    const {user}=req
-  //  console.log("get cat user",user)
-      const result = await CategoryService.getAllCategoryByUser(req);
-    
-      sendResponse(res, {
-        success: true,
-        message: 'Rental House retrive successfully',
-        statusCode: 201,
-        data: result,
-      });
-    });
+const getAllCategoryUser = catchAsync(async (req, res) => {
+  const result = await CategoryService.getAllCategoryByUser(req);
+
+  sendResponse(res, {
+    success: true,
+    message: 'Rental House retrive successfully',
+    statusCode: 201,
+    data: result,
+  });
+});
 const updateCategory = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await CategoryService.updateCategoryIntoDB(
@@ -83,5 +80,5 @@ export const CategoryController = {
   getAllCategory,
   updateCategory,
   deleteCategory,
-  getAllCategoryUser
-}
+  getAllCategoryUser,
+};

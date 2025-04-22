@@ -11,8 +11,8 @@ const user_interface_1 = require("../user/user.interface");
 const router = express_1.default.Router();
 router.post('/create-payment', (0, auth_1.default)(user_interface_1.UserRole.Tenant), rentpay_controller_1.RentPayController.rentPayment);
 router.get('/verify', (0, auth_1.default)(user_interface_1.UserRole.Tenant, user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), rentpay_controller_1.RentPayController.verifyPayment);
+router.get('/request/:id', (0, auth_1.default)(user_interface_1.UserRole.Tenant, user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), rentpay_controller_1.RentPayController.getRentPayByReqId);
 router.get('/:id', (0, auth_1.default)(user_interface_1.UserRole.Tenant, user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), rentpay_controller_1.RentPayController.getRentPayById);
-// router.get(
 //   '/verify',
 //   auth('admin', 'customer'),
 //   OrderControllers.verifyPayment,

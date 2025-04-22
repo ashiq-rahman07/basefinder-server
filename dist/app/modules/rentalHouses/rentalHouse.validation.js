@@ -12,8 +12,7 @@ const RentalHouseValidationSchema = zod_1.z.object({
         bathrooms: zod_1.z.number(),
         amenities: zod_1.z.array(zod_1.z.string()).optional(),
         images: zod_1.z.array(zod_1.z.string()).optional(),
-        // Assuming landlordId is a string representing an ObjectId
-    })
+    }),
 });
 exports.RentalHouseValidation = {
     RentalHouseValidationSchema,

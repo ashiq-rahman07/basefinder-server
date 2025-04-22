@@ -13,7 +13,7 @@ const user_interface_1 = require("../user/user.interface");
 const validateRequest_1 = __importDefault(require("../../middleware/validateRequest"));
 const category_validation_1 = require("./category.validation");
 const router = (0, express_1.Router)();
-router.get("/", category_controller_1.CategoryController.getAllCategory);
+router.get('/', category_controller_1.CategoryController.getAllCategory);
 router.get('/created-user', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), category_controller_1.CategoryController.getAllCategoryUser);
 router.post('/', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), multer_config_1.multerUpload.single('icon'), bodyParser_1.parseBody, (0, validateRequest_1.default)(category_validation_1.categoryValidation.createCategoryValidationSchema), category_controller_1.CategoryController.createCategory);
 router.patch('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord), multer_config_1.multerUpload.single('icon'), bodyParser_1.parseBody, (0, validateRequest_1.default)(category_validation_1.categoryValidation.updateCategoryValidationSchema), category_controller_1.CategoryController.updateCategory);

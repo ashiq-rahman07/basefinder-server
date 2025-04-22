@@ -45,12 +45,9 @@ const createRentalHouse = (houseData, houseImages, authUser) => __awaiter(void 0
     return result;
 });
 const getAllRentalHouse = (query) => __awaiter(void 0, void 0, void 0, function* () {
-    // console.log(query);
     const { categories, bedrooms, minPrice, maxPrice } = query, pQuery = __rest(query, ["categories", "bedrooms", "minPrice", "maxPrice"]);
     // Build the filter object
     const filter = {};
-    // console.log(categories);
-    // Filter by categories
     if (categories) {
         const categoryArray = typeof categories === 'string'
             ? categories.split(',')
@@ -62,7 +59,10 @@ const getAllRentalHouse = (query) => __awaiter(void 0, void 0, void 0, function*
     if (bedrooms) {
         filter.bedrooms = { $in: bedrooms };
     }
-    const RentalHouseQuery = new QueryBuilder_1.default(rentalHose_model_1.default.find(filter).populate('landlordUser').populate("category", "_id name").setOptions({ strictPopulate: false }), pQuery)
+    const RentalHouseQuery = new QueryBuilder_1.default(rentalHose_model_1.default.find(filter)
+        .populate('landlordUser')
+        .populate('category', '_id name')
+        .setOptions({ strictPopulate: false }), pQuery)
         .search(['name', 'location'])
         .filter()
         .sort()
@@ -70,7 +70,6 @@ const getAllRentalHouse = (query) => __awaiter(void 0, void 0, void 0, function*
         .fields()
         .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
     const result = yield RentalHouseQuery.modelQuery.populate('User');
-    //  console.log(result);
     const meta = yield RentalHouseQuery.countTotal();
     return {
         result,
@@ -81,23 +80,28 @@ const getAllHouseByUser = (req) => __awaiter(void 0, void 0, void 0, function* (
     const { query, user } = req;
     let rentalHouses;
     // If the user is an admin, fetch all listings
-    if (user.role === "admin") {
-        rentalHouses = new QueryBuilder_1.default(rentalHose_model_1.default.find().populate('landlordUser').populate("category", "_id name").setOptions({ strictPopulate: false }), query)
+    if (user.role === 'admin') {
+        rentalHouses = new QueryBuilder_1.default(rentalHose_model_1.default.find()
+            .populate('landlordUser')
+            .populate('category', '_id name')
+            .setOptions({ strictPopulate: false }), query)
             .search(rentalHouse_constant_1.RentalHouseSearchableFields)
             .filter()
             .sort()
             .paginate()
             .fields();
     }
-    else if (user.role === "landlord") {
-        rentalHouses = new QueryBuilder_1.default(rentalHose_model_1.default.find({ landlordUser: user.userId }).populate('landlordUser').populate("category", "_id name").setOptions({ strictPopulate: false }), query)
+    else if (user.role === 'landlord') {
+        rentalHouses = new QueryBuilder_1.default(rentalHose_model_1.default.find({ landlordUser: user.userId })
+            .populate('landlordUser')
+            .populate('category', '_id name')
+            .setOptions({ strictPopulate: false }), query)
             .search(rentalHouse_constant_1.RentalHouseSearchableFields)
             .filter()
             .sort()
             .paginate()
             .fields();
     }
-    ;
     const result = yield (rentalHouses === null || rentalHouses === void 0 ? void 0 : rentalHouses.modelQuery.populate('User'));
     const meta = yield (rentalHouses === null || rentalHouses === void 0 ? void 0 : rentalHouses.countTotal());
     return {
@@ -112,7 +116,10 @@ const getRenTalHouseById = (id) => __awaiter(void 0, void 0, void 0, function* (
 const updateRenTalHouseById = (houseId, payload, houseImages, authUser) => __awaiter(void 0, void 0, void 0, function* () {
     const { images } = houseImages;
     const user = yield user_model_1.default.findById(authUser.userId);
-    const house = yield rentalHose_model_1.default.findOne({ _id: houseId, landlordUser: authUser.userId });
+    const house = yield rentalHose_model_1.default.findOne({
+        _id: houseId,
+        landlordUser: authUser.userId,
+    });
     if (!(user === null || user === void 0 ? void 0 : user.isActive)) {
         throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'User is not active');
     }
@@ -135,5 +142,5 @@ exports.RentalHouseServices = {
     getRenTalHouseById,
     updateRenTalHouseById,
     deleteRenTalHouseById,
-    getAllHouseByUser
+    getAllHouseByUser,
 };

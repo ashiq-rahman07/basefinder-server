@@ -42,7 +42,9 @@ const getAllCategory = (query) => __awaiter(void 0, void 0, void 0, function* ()
         var _a, _b;
         const parentId = (_b = (_a = category.parent) === null || _a === void 0 ? void 0 : _a._id) === null || _b === void 0 ? void 0 : _b.toString();
         if (parentId && categoryMap.has(parentId)) {
-            categoryMap.get(parentId).children.push(categoryMap.get(category._id.toString()));
+            categoryMap
+                .get(parentId)
+                .children.push(categoryMap.get(category._id.toString()));
         }
         else if (!parentId) {
             hierarchy.push(categoryMap.get(category._id.toString()));
@@ -57,32 +59,26 @@ const getAllCategoryByUser = (req) => __awaiter(void 0, void 0, void 0, function
     const { query, user } = req;
     let categories;
     // If the user is an admin, fetch all listings
-    if (user.role === "admin") {
-        categories = new QueryBuilder_1.default(category_model_1.Category.find().populate('createdBy', "_id name").setOptions({ strictPopulate: false }), query)
+    if (user.role === 'admin') {
+        categories = new QueryBuilder_1.default(category_model_1.Category.find()
+            .populate('createdBy', '_id name')
+            .setOptions({ strictPopulate: false }), query)
             .search(['name'])
             .filter()
             .sort()
             .paginate()
             .fields();
     }
-    else if (user.role === "landlord") {
-        categories = new QueryBuilder_1.default(category_model_1.Category.find({ createdBy: user.userId }).populate('createdBy', "_id name").setOptions({ strictPopulate: false }), query)
+    else if (user.role === 'landlord') {
+        categories = new QueryBuilder_1.default(category_model_1.Category.find({ createdBy: user.userId })
+            .populate('createdBy', '_id name')
+            .setOptions({ strictPopulate: false }), query)
             .search(['name'])
             .filter()
             .sort()
             .paginate()
             .fields();
     }
-    ;
-    // If the user is a tenant, return an empty array or handle accordingly
-    //    console.log('lend and admin :',rentalHouses)
-    // const RentalHouseQuery = new QueryBuilder(RentalHouse.find().populate('landlordUser').populate("category","_id name").setOptions({ strictPopulate: false }), query)
-    // .search(RentalHouseSearchableFields)
-    // .filter()
-    // .sort()
-    // .paginate()
-    // .fields();
-    // console.log(rentalHouses)
     const result = yield (categories === null || categories === void 0 ? void 0 : categories.modelQuery.populate('User'));
     const meta = yield (categories === null || categories === void 0 ? void 0 : categories.countTotal());
     return {
@@ -93,10 +89,11 @@ const getAllCategoryByUser = (req) => __awaiter(void 0, void 0, void 0, function
 const updateCategoryIntoDB = (id, payload, file, authUser) => __awaiter(void 0, void 0, void 0, function* () {
     const isCategoryExist = yield category_model_1.Category.findById(id);
     if (!isCategoryExist) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Category not found!");
+        throw new appError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'Category not found!');
     }
-    if ((authUser.role === user_interface_1.UserRole.Landlord) && (isCategoryExist.createdBy.toString() !== authUser.userId)) {
-        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "You are not able to edit the category!");
+    if (authUser.role === user_interface_1.UserRole.Landlord &&
+        isCategoryExist.createdBy.toString() !== authUser.userId) {
+        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'You are not able to edit the category!');
     }
     if (file && file.path) {
         payload.icon = file.path;
@@ -115,7 +112,7 @@ const deleteCategoryIntoDB = (id, authUser) => __awaiter(void 0, void 0, void 0,
     }
     const product = yield rentalHose_model_1.default.findOne({ category: id });
     if (product)
-        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "You can not delete the Category. Because the Category is related to products.");
+        throw new appError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, 'You can not delete the Category. Because the Category is related to products.');
     const deletedCategory = yield category_model_1.Category.findByIdAndDelete(id);
     return deletedCategory;
 });
@@ -124,5 +121,5 @@ exports.CategoryService = {
     getAllCategory,
     updateCategoryIntoDB,
     deleteCategoryIntoDB,
-    getAllCategoryByUser
+    getAllCategoryByUser,
 };
