@@ -14,6 +14,7 @@ router.post(
   validateRequest(UserValidation.userValidationSchema),
   UserControllers.registerUserIntoDB,
 );
+router.get('/my-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.myProfile);
 router.get('/allusers', UserControllers.getAllUsers);
 router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
 router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.getSingleUsers);
@@ -23,17 +24,17 @@ router.get('/:id', auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserC
 //   validateRequest(UserValidation.userUpdateValidationSchema),
 //   UserControllers.updateUser,
 // );
-// router.patch(
-//   '/status/:userId',
-//   auth('admin'),
-//   validateRequest(UserValidation.userUpdateValidationSchema),
-//   UserControllers.updateUserStatus,
-// );
+
+router.patch(
+  '/status/:userId',
+  auth(UserRole.ADMIN),
+  UserControllers.updateUserStatus,
+);
 router.delete('/:id', auth(UserRole.ADMIN), UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
 router.get('/allusers', UserControllers.getAllUsers);
 router.post('/update-profile',auth(UserRole.ADMIN,UserRole.Landlord,UserRole.Tenant), UserControllers.updateProfile);
-router.get('/my-profile', UserControllers.myProfile);
+
 // router.patch(
 //   '/update/:id',
 //   validateRequest(UserValidation.userUpdateValidationSchema),

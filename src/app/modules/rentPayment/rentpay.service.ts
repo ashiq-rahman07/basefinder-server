@@ -8,12 +8,12 @@ import { RentPayUtils } from "./rentpay.utils";
 
 const rentPayment = async (
     tenant: string,
-    payload: { listingId: string; rentAmount: number  },
+    payload: { listingId: string;requestId:string ;rentAmount: number  },
     client_ip: string,
   ) => {
     // console.log(tenant);
     console.log(payload, "payload");
-   const  { listingId, rentAmount } = payload;
+   const  { listingId, rentAmount,requestId } = payload;
   
     try {
      
@@ -28,6 +28,7 @@ const rentPayment = async (
       let rentPay = await RentPayment.create({
        tenant,
         listing:listingId,
+        requestId,
           rentAmount
       });
   
@@ -66,6 +67,12 @@ const rentPayment = async (
 const getRentPayById = async(
   tenantId:string,id:string)=>{
     const paymentInfo = await RentPayment.findOne({'transaction.id': id, tenant:tenantId});
+   
+    return paymentInfo;
+} 
+const getRentPayByReqId = async(
+  tenantId:string,id:string)=>{
+    const paymentInfo = await RentPayment.findOne({requestId: id, tenant:tenantId});
    
     return paymentInfo;
 } 
@@ -119,5 +126,6 @@ const verifyPayment = async (order_id: string,userId:string) => {
   export const RentPayService = {
     rentPayment,
     getRentPayById,
+    getRentPayByReqId,
     verifyPayment
   };

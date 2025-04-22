@@ -119,8 +119,10 @@ const updateRenTalHouseById = async(
     const { images } = houseImages;
 
     const user = await User.findById(authUser.userId);
+   
 
     const house = await RentalHouse.findOne({_id:houseId, landlordUser:authUser.userId});
+   
 
     if (!user?.isActive) {
        throw new AppError(StatusCodes.BAD_REQUEST, 'User is not active');

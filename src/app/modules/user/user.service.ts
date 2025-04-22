@@ -5,13 +5,11 @@ import { StatusCodes } from 'http-status-codes';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { UserSearchableFields } from './user.constant';
 
-// import mongoose from 'mongoose';
-// import { IImageFile } from '../../interface/IImageFile';
-// import { AuthService } from '../auth/auth.service';
-
 import { IJwtPayload } from '../auth/auth.interface';
+import RentalHouse from '../rentalHouses/rentalHose.model';
+import RentalRequest from '../rentalRequest/rentalRequest.model';
 
-// Function to register user
+
 const registerUser = async (userData: IUser) => {
   
 
@@ -19,7 +17,7 @@ const registerUser = async (userData: IUser) => {
          throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'Invalid role. Only User is allowed.');
       }
 
-      // Check if the user already exists by email
+     
       const existingUser = await User.findOne({ email: userData.email });
       if (existingUser) {
          throw new AppError(StatusCodes.NOT_ACCEPTABLE, 'Email is already registered');
@@ -54,29 +52,28 @@ const getSingleUser = async (id:string) => {
 
   return user
 };
-const deleteUser = async (id:string) => {
-   const user = User.findOneAndDelete({id})
+
+// const deleteUser = async (id:string) => {
+//    const user = User.findOneAndDelete({id})
 
 
-  return user
-};
+//   return user
+// };
 
 const myProfile = async (authUser: IJwtPayload) => {
-   const isUserExists = await User.findById(authUser.userId);
-   if (!isUserExists) {
-      throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
-   }
-   if (!isUserExists.isActive) {
-      throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
-   }
+   
+   const result = await User.findById(authUser.userId).select('-password');
+   // if (!isUserExists) {
+   //    throw new AppError(StatusCodes.NOT_FOUND, "User not found!");
+   // }
+   // if (!isUserExists.isActive) {
+   //    throw new AppError(StatusCodes.BAD_REQUEST, "User is not active!");
+   // }
+   
+   // const profile = await User.findOne({ user: isUserExists._id }).select('password');
 
-   const profile = await User.findOne({ user: isUserExists._id });
 
-
-   return {
-      ...isUserExists.toObject(),
-      profile: profile || null
-   }
+return result
 
 }
 
@@ -108,24 +105,54 @@ const updateProfile = async (
    return result;
 };
 
-// const updateUserStatus = async (userId: string) => {
-//    const user = await User.findById(userId);
+const updateUserStatus = async (userId: string) => {
+   const user = await User.findById(userId);
 
-//    console.log('comes here');
-//    if (!user) {
-//       throw new AppError(StatusCodes.NOT_FOUND, 'User is not found');
-//    }
+  
+   if (!user) {
+      throw new AppError(StatusCodes.NOT_FOUND, 'User is not found');
+   }
 
-//    user.isActive = !user.isActive;
-//    const updatedUser = await user.save();
-//    return updatedUser;
-// };
+   user.isActive = !user.isActive;
+   const updatedUser = await user.save();
+   return updatedUser;
+};
 
+
+
+const deleteUser = async (id:string) => {
+   try {
+    const user = await User.findById(id)
+    if(user?.role =="tenant"){
+     
+      await User.findByIdAndDelete(id);
+      return {message:"user delete also request listing and request delete create by user"}
+    }
+
+      //  Delete all listings created by the user
+       const listings = await RentalHouse.find({ landlordUser: id });
+ 
+       for (const listing of listings) {
+         // Delete all requests associated with each listing
+         await RentalRequest.deleteMany({ listingId: listing._id });
+       }
+   
+       // Delete listings
+       await RentalHouse.deleteMany({ landlordUser: id });
+   
+       // Delete user
+       await User.findByIdAndDelete(id);
+   
+      return {message:"user delete also reted listing and request delete create by user"}
+   } catch (error:any) {
+    return ({ message: error.message });
+   }
+ };
 export const UserServices = {
    registerUser,
    getAllUser,
    myProfile,
-//    updateUserStatus,
+   updateUserStatus,
 updateProfile,
 getSingleUser,
 deleteUser

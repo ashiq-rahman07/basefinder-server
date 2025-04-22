@@ -42,7 +42,7 @@ const getAllRentReqTenant  = async(tenantId:string,query:Record<string,unknown>)
     .paginate()
     .fields();
 
- const result = await RentalRequestQuery.modelQuery.populate('listingId','name location rentAmount' )
+ const result = await RentalRequestQuery.modelQuery.populate('listingId','name location rentAmount images' )
 
  const meta = await RentalRequestQuery.countTotal();
  return {
@@ -57,7 +57,7 @@ const getAllRentalRequestLandlord  = async(userId:string)=>{
 
     const result = await RentalRequest.find({ listingId: { $in: listingIds } }).populate(
         'listingId',
-        'location name rentAmount'
+        'location name rentAmount images'
       ).populate(
         'tenantId',
         'name email'

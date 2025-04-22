@@ -12,9 +12,11 @@ router.get(
     auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord),
     RentPayController.verifyPayment,
   );
+  router.get('/request/:id', auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord), RentPayController.getRentPayByReqId);
 
 router.get('/:id', auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Landlord), RentPayController.getRentPayById);
-// router.get(
+
+
 //   '/verify',
 //   auth('admin', 'customer'),
 //   OrderControllers.verifyPayment,

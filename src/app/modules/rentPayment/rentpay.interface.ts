@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 export interface IPayment extends Document {
     tenant: Types.ObjectId;
     listing:Types.ObjectId;
+    requestId:Types.ObjectId;
     rentAmount: number;
     status: 'Pending' | 'Paid' | 'Cancelled';
     transaction: {

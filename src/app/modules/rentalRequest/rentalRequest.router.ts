@@ -26,6 +26,8 @@ router.delete('/:id', auth(UserRole.ADMIN), RentalRequestController.deleteRenTal
 router.patch('/:id', auth(UserRole.ADMIN),RentalRequestController.updateRenTalRequestById);
 
 
-router.get('/', auth(UserRole.Tenant),RentalRequestController.getAllRentalRequest);
+router.get('/', auth(UserRole.Tenant,UserRole.ADMIN,UserRole.Tenant
+  
+),RentalRequestController.getAllRentalRequest);
 
 export const RentalRequestRoutes = router;

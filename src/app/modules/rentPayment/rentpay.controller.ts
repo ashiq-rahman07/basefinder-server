@@ -30,6 +30,19 @@ const rentPayment = catchAsync(async (req, res) => {
       data: result,
     });
   });
+  const getRentPayByReqId = catchAsync(async (req, res) => {
+    const {id}= req.params
+    const {userId}=req.user
+    // console.log(id)
+    const result = await RentPayService.getRentPayById(userId,id);
+  
+    sendResponse(res, {
+      success: true,
+      message: 'PaymentInfo retrive successfully',
+      statusCode: 201,
+      data: result,
+    });
+  });
   
   const verifyPayment = catchAsync(async (req, res) => {
     const {userId} = req.user
@@ -47,5 +60,6 @@ const rentPayment = catchAsync(async (req, res) => {
   export const RentPayController = {
     rentPayment,
     getRentPayById,
+    getRentPayByReqId ,
     verifyPayment
   };

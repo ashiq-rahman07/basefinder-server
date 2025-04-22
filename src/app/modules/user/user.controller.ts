@@ -1,11 +1,10 @@
-// import httpStatus from 'http-status';
+
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { IJwtPayload } from '../auth/auth.interface';
 import { UserServices } from './user.service';
-// import { User } from './user.model';
-// import { string } from 'zod';
+
 
 const registerUserIntoDB = catchAsync(async (req, res) => {
   const result = await UserServices.registerUser(req.body);
@@ -62,18 +61,19 @@ const updateProfile = catchAsync(async (req, res) => {
     data: result,
   });
 });
-// const updateUserStatus = catchAsync(async (req, res) => {
-//   const { userId } = req.params;
-//   console.log(userId, req.body);
-//   const result = await UserServices.updateUserStatus(userId, req.body);
 
-//   sendResponse(res, {
-//     success: true,
-//     message: 'User update successfully',
-//     statusCode: 201,
-//     data: result,
-//   });
-// });
+const updateUserStatus = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+
+  const result = await UserServices.updateUserStatus(userId);
+
+  sendResponse(res, {
+    success: true,
+    message: 'User update successfully',
+    statusCode: 201,
+    data: result,
+  });
+});
 const deleteUser = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await UserServices.deleteUser(id);
@@ -82,7 +82,7 @@ const deleteUser = catchAsync(async (req, res) => {
     success: true,
     message: 'User delete successfully',
     statusCode: 201,
-    data: result,
+    data: result.message,
   });
 });
 
@@ -96,5 +96,5 @@ export const UserControllers = {
   updateProfile,
   deleteUser,
   getSingleUsers,
-//   updateUserStatus,
+  updateUserStatus,
 };
