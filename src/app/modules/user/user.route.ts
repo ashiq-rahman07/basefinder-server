@@ -44,7 +44,7 @@ router.patch(
 );
 router.delete('/:id', auth(UserRole.ADMIN), UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
-router.get('/allusers', UserControllers.getAllUsers);
+router.get('/allusers', auth(UserRole.ADMIN), UserControllers.getAllUsers);
 router.post(
   '/update-profile',
   auth(UserRole.ADMIN, UserRole.Landlord, UserRole.Tenant),
