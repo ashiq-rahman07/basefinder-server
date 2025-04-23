@@ -27,7 +27,7 @@ router.get('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_int
 router.patch('/status/:userId', (0, auth_1.default)(user_interface_1.UserRole.ADMIN), user_controller_1.UserControllers.updateUserStatus);
 router.delete('/:id', (0, auth_1.default)(user_interface_1.UserRole.ADMIN), user_controller_1.UserControllers.deleteUser);
 // router.get('/', auth(UserRole.ADMIN, UserRole.Landlord,UserRole.Tenant), UserControllers.getAllUsers);
-router.get('/allusers', user_controller_1.UserControllers.getAllUsers);
+router.get('/allusers', (0, auth_1.default)(user_interface_1.UserRole.ADMIN), user_controller_1.UserControllers.getAllUsers);
 router.post('/update-profile', (0, auth_1.default)(user_interface_1.UserRole.ADMIN, user_interface_1.UserRole.Landlord, user_interface_1.UserRole.Tenant), user_controller_1.UserControllers.updateProfile);
 // router.patch(
 //   '/update/:id',
