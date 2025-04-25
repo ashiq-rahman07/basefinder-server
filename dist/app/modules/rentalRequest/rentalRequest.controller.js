@@ -88,7 +88,8 @@ const updateRenTalRequestById = (0, catchAsync_1.default)((req, res) => __awaite
 }));
 const updateRequestStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { requestId } = req.params;
-    const result = yield rentalRequest_service_1.RentalRequestServices.updateRequestStatus(requestId, req.body);
+    const { userId } = req.user;
+    const result = yield rentalRequest_service_1.RentalRequestServices.updateRequestStatus(requestId, userId, req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
         message: 'Rental Request Approved successfully',

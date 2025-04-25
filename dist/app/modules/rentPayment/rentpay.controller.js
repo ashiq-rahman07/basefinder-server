@@ -59,9 +59,20 @@ const verifyPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         success: true,
     });
 }));
+const getLandPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.user;
+    const paymentData = yield rentpay_service_1.RentPayService.getLandPayment(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: 201,
+        message: 'Landlord payment data get successfully',
+        data: paymentData,
+        success: true,
+    });
+}));
 exports.RentPayController = {
     rentPayment,
     getRentPayById,
     getRentPayByReqId,
     verifyPayment,
+    getLandPayment,
 };

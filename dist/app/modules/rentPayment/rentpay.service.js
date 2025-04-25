@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RentPayService = void 0;
+const mongoose_1 = require("mongoose");
 const appError_1 = __importDefault(require("../../errors/appError"));
 const rentalHose_model_1 = __importDefault(require("../rentalHouses/rentalHose.model"));
 const rentalRequest_model_1 = __importDefault(require("../rentalRequest/rentalRequest.model"));
@@ -107,9 +108,45 @@ const verifyPayment = (order_id, userId) => __awaiter(void 0, void 0, void 0, fu
     }
     return verifiedPayment;
 });
+const getLandPayment = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const landlordPayments = yield rentpay_model_1.default.aggregate([
+        {
+            $lookup: {
+                from: 'rentalhouses', // collection name, not the model name
+                localField: 'listing',
+                foreignField: '_id',
+                as: 'listingInfo',
+            },
+        },
+        {
+            $unwind: '$listingInfo',
+        },
+        {
+            $match: {
+                'listingInfo.landlordUser': new mongoose_1.Types.ObjectId(userId),
+            },
+        },
+        {
+            $project: {
+                _id: 1,
+                tenant: 1,
+                listing: 1,
+                rentAmount: 1,
+                status: 1,
+                createdAt: 1,
+                transaction: 1,
+                listingName: '$listingInfo.name',
+                listingLocation: '$listingInfo.location',
+                listingImages: '$listingInfo.images',
+            },
+        },
+    ]);
+    return landlordPayments;
+});
 exports.RentPayService = {
     rentPayment,
     getRentPayById,
     getRentPayByReqId,
     verifyPayment,
+    getLandPayment,
 };

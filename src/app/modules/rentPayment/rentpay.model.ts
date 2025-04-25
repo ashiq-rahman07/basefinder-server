@@ -15,7 +15,7 @@ const PaymentSchema = new Schema<IPayment>(
     },
     requestId: {
       type: Schema.Types.ObjectId,
-      ref: 'RentalHouse',
+      ref: 'RentalRequest',
       required: true,
     },
     rentAmount: {

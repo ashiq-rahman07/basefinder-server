@@ -1,3 +1,4 @@
+import mongoose, { Schema, Types } from 'mongoose';
 import AppError from '../../errors/appError';
 import RentalHouse from '../rentalHouses/rentalHose.model';
 import RentalRequest from '../rentalRequest/rentalRequest.model';
@@ -118,10 +119,47 @@ const verifyPayment = async (order_id: string, userId: string) => {
 
   return verifiedPayment;
 };
+const getLandPayment = async (userId: string) => {
+  const landlordPayments = await RentPayment.aggregate([
+    {
+      $lookup: {
+        from: 'rentalhouses', // collection name, not the model name
+        localField: 'listing',
+        foreignField: '_id',
+        as: 'listingInfo',
+      },
+    },
+    {
+      $unwind: '$listingInfo',
+    },
+    {
+      $match: {
+        'listingInfo.landlordUser': new Types.ObjectId(userId),
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        tenant: 1,
+        listing: 1,
+        rentAmount: 1,
+        status: 1,
+        createdAt: 1,
+        transaction: 1,
+        listingName: '$listingInfo.name',
+        listingLocation: '$listingInfo.location',
+        listingImages: '$listingInfo.images',
+      },
+    },
+  ]);
+
+  return landlordPayments;
+};
 
 export const RentPayService = {
   rentPayment,
   getRentPayById,
   getRentPayByReqId,
   verifyPayment,
+  getLandPayment,
 };

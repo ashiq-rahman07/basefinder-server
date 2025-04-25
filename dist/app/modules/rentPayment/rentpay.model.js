@@ -14,7 +14,7 @@ const PaymentSchema = new mongoose_1.Schema({
     },
     requestId: {
         type: mongoose_1.Schema.Types.ObjectId,
-        ref: 'RentalHouse',
+        ref: 'RentalRequest',
         required: true,
     },
     rentAmount: {

@@ -7,11 +7,16 @@ const rentalHouse_route_1 = require("../modules/rentalHouses/rentalHouse.route")
 const rentalRequest_router_1 = require("../modules/rentalRequest/rentalRequest.router");
 const category_routes_1 = require("../modules/category/category.routes");
 const rentpay_route_1 = require("../modules/rentPayment/rentpay.route");
+const notification_route_1 = require("../modules/notification/notification.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
         path: '/user',
         route: user_route_1.UserRoutes,
+    },
+    {
+        path: '/notification',
+        route: notification_route_1.RentalNotification,
     },
     {
         path: '/auth',

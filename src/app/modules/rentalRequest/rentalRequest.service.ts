@@ -1,18 +1,56 @@
-import { string } from 'zod';
 import QueryBuilder from '../../builder/QueryBuilder';
 import AppError from '../../errors/appError';
 import RentalHouse from '../rentalHouses/rentalHose.model';
 import { RentalRequestSearchableFields } from './rentalRequest.constant';
 import { IRentalRequest } from './rentalRequest.interface';
 import RentalRequest from './rentalRequest.model';
+import { Notification } from '../notification/notification.model';
+import User from '../user/user.model';
 
 const createRentalRequest = async (userId: string, payload: IRentalRequest) => {
   const requestData = {
     ...payload,
     tenantId: userId,
   };
-  const rentalHouse = await RentalRequest.create(requestData);
-  return rentalHouse;
+
+  const rentalRequest = await RentalRequest.create(requestData);
+
+  // Step 3: Fetch the listing to find landlord info
+  const listing = await RentalHouse.findById(payload.listingId).lean();
+
+  if (!listing) {
+    throw new Error('Listing not found');
+  }
+
+  const landlordId = listing.landlordUser;
+
+  if (!landlordId) {
+    throw new Error('Landlord not found for this listing');
+  }
+
+  // Step 4: Create notification for the landlord
+  await Notification.create({
+    senderId: userId,
+    recipientId: landlordId,
+    role: 'landlord',
+    type: 'REQUEST_SUBMITTED',
+    message: 'A new rental request has been submitted for your listing.',
+    isRead: false,
+  });
+
+  const adminUsers = await User.find({ role: 'admin' });
+
+  const adminNotifications = adminUsers.map((admin) => ({
+    senderId: userId, // or the actual landlord id if accessible
+    recipientId: admin._id,
+    role: 'admin',
+    type: 'REQUEST_APPROVED',
+    message: `Tenant make a request  for listing ${listing._id}`,
+    isRead: false,
+  }));
+  await Notification.insertMany(adminNotifications);
+
+  return rentalRequest;
 };
 
 const getAllRentalRequest = async (query: Record<string, unknown>) => {
@@ -81,6 +119,7 @@ const getRenTalRequestById = async (id: string) => {
 };
 const updateRequestStatus = async (
   id: string,
+  userId: string,
   payload: { status: string; landlordPhone?: string }
 ) => {
   const { status, landlordPhone } = payload;
@@ -107,12 +146,38 @@ const updateRequestStatus = async (
       throw new AppError(404, 'Request not found');
       //   return res.status(404).json({ success: false, message: 'Request not found' });
     }
+    // ✅ Create notification for tenant if approved
+    if (status === 'Approved') {
+      await Notification.create({
+        senderId: userId,
+        recipientId: request.tenantId,
+        role: 'tenant',
+        type: 'REQUEST_APPROVED',
+        message: 'Your rental request has been approved!',
+        isRead: false,
+      });
+    }
 
+    if (status === 'Approved') {
+      const adminUsers = await User.find({ role: 'admin' });
+
+      const adminNotifications = adminUsers.map((admin) => ({
+        senderId: userId, // or the actual landlord id if accessible
+        recipientId: admin._id,
+        role: 'admin',
+        type: 'REQUEST_APPROVED',
+        message: `Landlord approved a rental request for listing ${request.listingId}`,
+        isRead: false,
+      }));
+
+      await Notification.insertMany(adminNotifications);
+    }
     // res.status(200).json({ success: true, data: updatedRequest });
     const result = {
       success: true,
       data: updatedRequest,
     };
+
     return result;
   } catch (error) {
     console.error('Error updating request status:', error);

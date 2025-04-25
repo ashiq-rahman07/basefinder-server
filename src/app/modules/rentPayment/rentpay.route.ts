@@ -16,6 +16,11 @@ router.get(
   RentPayController.verifyPayment
 );
 router.get(
+  '/land/payment',
+  auth(UserRole.Landlord),
+  RentPayController.getLandPayment
+);
+router.get(
   '/request/:id',
   auth(UserRole.Tenant, UserRole.ADMIN, UserRole.Landlord),
   RentPayController.getRentPayByReqId

@@ -101,9 +101,10 @@ const updateRenTalRequestById = catchAsync(async (req, res) => {
 });
 const updateRequestStatus = catchAsync(async (req, res) => {
   const { requestId } = req.params;
-
+  const { userId } = req.user;
   const result = await RentalRequestServices.updateRequestStatus(
     requestId,
+    userId,
     req.body
   );
 
